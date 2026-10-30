@@ -1,3 +1,6 @@
+
+    
+  
 name: Windows EXE build test
 
 # Push only a disposable test branch, without publishing a GitHub Release.
@@ -39,8 +42,9 @@ jobs:
           if-no-files-found: error
           path: |
             dist/SectorRec.exe
-            dist/SectorRec-*-Windows-x64.zip
+            dist/SectorRec-*-Windows-x64-Portable.zip
             dist/SectorRec-*-Windows-x64-Setup.exe
             dist/SectorRec-Cygwin-GPL-sources.zip
             dist/SectorRec-Windows-thirdparty-sources.zip
             dist/THIRD_PARTY_NOTICES.txt
+
