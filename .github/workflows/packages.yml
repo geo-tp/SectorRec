@@ -206,6 +206,11 @@ jobs:
           test -s "release-assets/sectorrec_${version%-*}.orig.tar.gz"
           test -s "release-assets/sectorrec_${version}.dsc"
           test -s "release-assets/sectorrec_${version}.debian.tar.xz"
+          # Keep the unpackaged PyInstaller EXE as a CI artifact only: it is
+          # not a standalone download (the Setup and portable ZIP are).
+          rm -f release-assets/SectorRec.exe
+          # Publish all other required archives and their notices, including
+          # corresponding GPL sources, without dropping compliance materials.
           (cd release-assets && sha256sum ./* > SHA256SUMS.txt)
 
       - name: Create or update GitHub Release
