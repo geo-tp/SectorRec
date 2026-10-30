@@ -53,10 +53,10 @@ def test_windows_release_zip_name_is_consistent_across_build_and_workflows():
     build = (ROOT / 'build-windows.ps1').read_text(encoding='utf8')
     release = (ROOT / '.github/workflows/packages.yml').read_text(encoding='utf8')
     preflight = (ROOT / '.github/workflows/windows-preflight.yml').read_text(encoding='utf8')
-    assert 'SectorRec-$version-Windows-x64.zip' in build
-    assert 'SectorRec-${version_app}-Windows-x64.zip' in release
+    assert 'SectorRec-$version-Windows-x64-Portable.zip' in build
+    assert 'SectorRec-${version_app}-Windows-x64-Portable.zip' in release
     for content in (release, preflight):
-        assert 'dist/SectorRec-*-Windows-x64.zip' in content
+        assert 'dist/SectorRec-*-Windows-x64-Portable.zip' in content
     for content in (build, release, preflight):
         assert '-experimental' not in content.lower()
     assert 'SectorRec-${version_app}-Windows-x64-Setup.exe' in release

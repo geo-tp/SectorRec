@@ -4,6 +4,7 @@ import re
 import shutil
 import subprocess
 import time
+from src.infrastructure.appimage_environment import host_environment
 
 SUPPORTED_FS = frozenset(('vfat', 'fat', 'exfat', 'ntfs', 'ext2', 'ext3', 'ext4'))
 # Anything under an active OS mount is never offered for recovery.  A user
@@ -132,7 +133,7 @@ def unmount_volume(device: str, detect_devices=detect_devices, helper_command=No
         try:
             cp = subprocess.run([udisksctl, 'unmount', '--block-device', device,
                                  '--no-user-interaction'], capture_output=True,
-                                text=True, timeout=10, check=False)
+                                text=True, timeout=10, check=False, env=host_environment())
             if cp.returncode == 0:
                 return
             udisks_error = (cp.stderr or cp.stdout or '').strip()
@@ -148,7 +149,7 @@ def unmount_volume(device: str, detect_devices=detect_devices, helper_command=No
         timeout = 300 if (os.environ.get('SECTORREC_APPIMAGE') == '1' or
                           os.environ.get('SECTORREC_DEBIAN_ARCHIVE') == '1') else 12
         cp = subprocess.run(helper_command('unmount', device), capture_output=True,
-                            text=True, timeout=timeout, check=False)
+                            text=True, timeout=timeout, check=False, env=host_environment())
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise RuntimeError('Unmount timed out or unavailable: '+str(exc)[:100]) from None
     if cp.returncode != 0:

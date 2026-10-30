@@ -25,6 +25,7 @@ from src.views.scan_guidance import scan_tip
 from src.views.elapsed import format_elapsed
 from src.controllers.imaging import ImagingJob
 from src.services.source_assessment import imaging_option_available as imaging_option_available
+from src.infrastructure.appimage_environment import host_environment
 
 BACKGROUND = '#0C1321'
 SURFACE = '#141F30'
@@ -2135,17 +2136,20 @@ class DesktopWindow:
             # Cancelling native pickers must never open a second Tk picker.
             parent=str(Path.home())
             if sys.platform.startswith('linux'):
-                command=None
+                commands=[]
                 if shutil.which('zenity'):
-                    command=['zenity','--file-selection','--directory',
-                             '--title=Select recovery destination', '--filename='+parent+'/']
-                elif shutil.which('kdialog'):
-                    command=['kdialog','--getexistingdirectory', parent,
-                             '--title', 'Select recovery destination']
-                if command:
+                    commands.append(['zenity','--file-selection','--directory',
+                                     '--title=Select recovery destination', '--filename='+parent+'/'])
+                if shutil.which('kdialog'):
+                    commands.append(['kdialog','--getexistingdirectory', parent,
+                                     '--title', 'Select recovery destination'])
+                if shutil.which('yad'):
+                    commands.append(['yad','--file','--directory',
+                                     '--title=Select recovery destination', '--filename='+parent+'/'])
+                for command in commands:
                     try:
                         result=subprocess.run(command, text=True, capture_output=True,
-                                              timeout=300, check=False)
+                                              timeout=300, check=False, env=host_environment())
                         if result.returncode in (0,1):
                             return result.stdout.strip() if result.returncode==0 else ''
                     except (OSError, subprocess.TimeoutExpired):
@@ -2936,20 +2940,23 @@ class DesktopWindow:
         def pick():
             parent=str(Path.home())
             if sys.platform.startswith('linux'):
-                command=None
+                commands=[]
                 if shutil.which('zenity'):
-                    command=['zenity','--file-selection','--title='+title,
-                             '--filename='+parent+'/',
-                             '--file-filter='+filetypes[0][0]+' | '+filetypes[0][1].replace(' ', ' '),
-                             '--file-filter=All files | *']
-                elif shutil.which('kdialog'):
-                    command=['kdialog','--getopenfilename',parent,
-                             filetypes[0][0]+' ('+filetypes[0][1]+');;All files (*)',
-                             '--title',title]
-                if command:
+                    commands.append(['zenity','--file-selection','--title='+title,
+                                     '--filename='+parent+'/',
+                                     '--file-filter='+filetypes[0][0]+' | '+filetypes[0][1],
+                                     '--file-filter=All files | *'])
+                if shutil.which('kdialog'):
+                    commands.append(['kdialog','--getopenfilename',parent,
+                                     filetypes[0][0]+' ('+filetypes[0][1]+');;All files (*)',
+                                     '--title',title])
+                if shutil.which('yad'):
+                    commands.append(['yad','--file','--title='+title,
+                                     '--filename='+parent+'/'])
+                for command in commands:
                     try:
                         result=subprocess.run(command,text=True,capture_output=True,
-                                              timeout=300,check=False)
+                                              timeout=300,check=False,env=host_environment())
                         if result.returncode in (0,1):
                             return result.stdout.strip() if result.returncode==0 else ''
                     except (OSError,subprocess.TimeoutExpired):

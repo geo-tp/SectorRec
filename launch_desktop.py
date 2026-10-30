@@ -2,7 +2,7 @@
 import sys
 
 
-def askpass():
+def askpass(smoke_test=False):
     """SectorRec-themed sudo -A prompt (separate process, never privileged)."""
     import tkinter as tk
     from importlib.resources import files
@@ -109,7 +109,13 @@ def askpass():
     root.deiconify()
     root.lift()
     field.focus_force()
+    if smoke_test:
+        # Real UI boot, then automatic dismissal: safe on a headless CI runner,
+        # does not request or print any password.
+        root.after(250, root.destroy)
     root.mainloop()
+    if smoke_test:
+        return 0
     if result[0] is None:
         return 1
     # SUDO_ASKPASS receives the secret on stdout; it is never logged or sent to
@@ -137,8 +143,25 @@ if __name__ == '__main__':
         root.withdraw()
         root.destroy()
         raise SystemExit(0)
+    if len(sys.argv) > 1 and sys.argv[1] == '--check-askpass-subprocess':
+        # Launch from the *already frozen parent*, using the same inherited
+        # environment that sudo -A receives during real disk authorization.
+        import os
+        import subprocess
+        from src.infrastructure.appimage_environment import host_environment
+        dialog = os.environ.get('SECTORREC_ASKPASS')
+        if not dialog:
+            raise RuntimeError('AppImage askpass wrapper was not configured')
+        process = subprocess.run([dialog, '--smoke-test'],
+                                 env=host_environment(),
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 timeout=20, check=False)
+        if process.returncode or process.stdout.strip():
+            sys.stderr.write(process.stderr.decode('utf-8', 'replace')[-800:])
+            raise SystemExit(process.returncode or 1)
+        raise SystemExit(0)
     if len(sys.argv) > 1 and sys.argv[1] == '--sectorrec-askpass':
-        raise SystemExit(askpass())
+        raise SystemExit(askpass(smoke_test='--smoke-test' in sys.argv[2:]))
     from src.app import main
     sys.argv = [sys.argv[0], '--ui', 'desktop', *sys.argv[1:]]
     raise SystemExit(main())

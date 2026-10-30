@@ -20,6 +20,8 @@ import tarfile
 import threading
 from pathlib import Path
 
+from src.infrastructure.appimage_environment import host_environment
+
 _LOCK = threading.Lock()
 _STAGED = None
 _ENGINES = ('fls', 'icat', 'testdisk', 'photorec', 'ddrescue', 'smartctl')
@@ -103,7 +105,7 @@ def _create(bundle: Path):
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             # Staging stays in the GUI's POSIX session so sudo's
                             # timestamp is shared with later reader operations.
-                            start_new_session=False)
+                            start_new_session=False, env=host_environment())
     try:
         try:
             with tarfile.open(fileobj=proc.stdin, mode='w|') as archive:

@@ -9,7 +9,11 @@ if ! command -v apt-get >/dev/null 2>&1; then
   exit 2
 fi
 arch="$(uname -m)"
-case "$arch" in x86_64|aarch64) :;; *) echo "Unsupported arch $arch" >&2; exit 2;; esac
+case "$arch" in
+  x86_64) PUBLIC_ARCH=amd64 ;;
+  aarch64) PUBLIC_ARCH=arm64 ;;
+  *) echo "Unsupported arch $arch" >&2; exit 2 ;;
+esac
 
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-venv python3-tk python3-pil \
@@ -52,7 +56,7 @@ chmod +x "$tooldir/appimagetool.AppImage"
 export PATH="$PWD/build/appimage-venv/bin:$PATH"
 APPIMAGETOOL_BIN="$tooldir/squashfs-root/AppRun" ./build-appimage.sh
 version="$(python3 -c 'from src import __version__; print(__version__)')"
-image="$PWD/dist/SectorRec_${version}_${arch}.AppImage"
+image="$PWD/dist/SectorRec-${version}-Linux-${PUBLIC_ARCH}.AppImage"
 test -s "$image"
 chmod +x "$image"
 

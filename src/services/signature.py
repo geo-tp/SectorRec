@@ -768,9 +768,10 @@ class PhotoRecWorker(threading.Thread):
             st['session_dir'] = str(session)
             with (session / 'photorec-output.log').open('wb') as log:
                 from src.infrastructure.privileged import isolated_process_group
+                from src.infrastructure.appimage_environment import host_environment
                 self.process = subprocess.Popen(args, cwd=session, stdout=log,
                                                 stdin=subprocess.PIPE if self._elevated else subprocess.DEVNULL,
-                                                stderr=subprocess.STDOUT,
+                                                stderr=subprocess.STDOUT, env=host_environment(),
                                                 **(isolated_process_group() if os.name == 'posix' else {}),
                                                 **no_console_window())
                 next_scan = 0.

@@ -192,7 +192,7 @@ if ($smokeProcess.ExitCode -ne 0 -or -not (Test-Path $smoke)) { throw 'Windows s
 if ($LASTEXITCODE -ne 0) { throw 'Windows screenshot is not a valid image' }
 $ddSmoke = Start-Process -FilePath $exe -ArgumentList '--selftest-ddrescue' -Wait -PassThru
 if ($ddSmoke.ExitCode -ne 0) { throw 'Frozen Windows ddrescue runtime self-test failed' }
-$bundle = Join-Path $root "dist/SectorRec-$version-Windows-x64.zip"
+$bundle = Join-Path $root "dist/SectorRec-$version-Windows-x64-Portable.zip"
 if (Test-Path $bundle) { Remove-Item $bundle }
 Compress-Archive -LiteralPath $exe,(Join-Path $root 'LICENSE'),(Join-Path $root 'docs/windows.md'),(Join-Path $root 'docs/windows-ddrescue-licenses.md') -DestinationPath $bundle
 $sourceTarballs = @(Get-ChildItem -Path (Join-Path $downloads 'cygwin-cache') -Recurse -File -ErrorAction SilentlyContinue |

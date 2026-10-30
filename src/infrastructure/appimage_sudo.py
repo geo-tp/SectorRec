@@ -15,6 +15,7 @@ import os
 import shutil
 import subprocess
 import threading
+from src.infrastructure.appimage_environment import host_environment
 
 _LOCK = threading.RLock()
 _STOP = threading.Event()
@@ -33,7 +34,8 @@ def _sudo():
 def _run(*args):
     return subprocess.run([_SUDO, *args], stdin=subprocess.DEVNULL,
                           stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
-                          timeout=180 if '-A' in args else 8, check=False)
+                          timeout=180 if '-A' in args else 8, check=False,
+                          env=host_environment())
 
 
 def _valid():
@@ -104,7 +106,7 @@ def close():
                 # No prompt; ordinary sudoers ties this to the GUI session.
                 subprocess.run([_SUDO, '-k'], stdin=subprocess.DEVNULL,
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                               timeout=4, check=False)
+                               timeout=4, check=False, env=host_environment())
             except (OSError, subprocess.TimeoutExpired):
                 pass
         _AUTHORIZED = False

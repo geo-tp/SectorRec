@@ -17,7 +17,11 @@ if ! python3 -c 'import PIL, tkinter, PyInstaller'; then
 fi
 ARCH=$(uname -m)
 VERSION=$(python3 -c 'from src import __version__; print(__version__)')
-case "$ARCH" in x86_64|aarch64) :;; *) echo "Unsupported architecture: $ARCH" >&2;exit 2;;esac
+case "$ARCH" in
+  x86_64) PUBLIC_ARCH=amd64 ;;
+  aarch64) PUBLIC_ARCH=arm64 ;;
+  *) echo "Unsupported architecture: $ARCH" >&2; exit 2 ;;
+esac
 python3 -m PyInstaller --noconfirm --clean --onedir --windowed \
  --name SectorRec --collect-data src launch_desktop.py
 APPDIR="$PWD/build/SectorRec.AppDir"
@@ -83,7 +87,10 @@ python3 -m zipapp "$ROOTSRC" -o "$APPDIR/usr/libexec/sectorrec-root.pyz"
 cat > "$APPDIR/usr/bin/sectorrec-askpass" <<'ASKPASS'
 #!/bin/sh
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
-exec "$HERE/usr/opt/SectorRec/SectorRec" --sectorrec-askpass
+# This is a *new* instance of the frozen app, not a fork/worker sharing the
+# parent PyInstaller bootloader state. Otherwise Tcl/Tk may fail to load BLT.
+export PYINSTALLER_RESET_ENVIRONMENT=1
+exec "$HERE/usr/opt/SectorRec/SectorRec" --sectorrec-askpass "$@"
 ASKPASS
 chmod +x "$APPDIR/usr/bin/sectorrec-askpass"
 # Package binary dependencies of the TSK programs; do not overwrite core glibc
@@ -103,6 +110,15 @@ cat > "$APPDIR/AppRun" <<'EOF'
 #!/bin/sh
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 export PATH="$HERE/usr/bin:$PATH"
+# Save the user's loader path BEFORE adding bundled recovery tool libraries.
+# Host utilities (sudo, Zenity, KDialog, UDisks) must not see AppImage libraries.
+if [ "${LD_LIBRARY_PATH+x}" = x ]; then
+  export SECTORREC_HOST_LD_LIBRARY_PATH_PRESENT=1
+  export SECTORREC_HOST_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+else
+  export SECTORREC_HOST_LD_LIBRARY_PATH_PRESENT=0
+  unset SECTORREC_HOST_LD_LIBRARY_PATH
+fi
 export LD_LIBRARY_PATH="$HERE/usr/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 # Only the guarded helper process gets root rights, through an explicit
 # sudo/Polkit prompt. The desktop process remains the invoking user.
@@ -231,7 +247,7 @@ done
 test -s "$APPDIR/usr/libexec/sectorrec-root.pyz"
 mkdir -p dist
 export ARCH
-image="$PWD/dist/SectorRec_${VERSION}_${ARCH}.AppImage"
+image="$PWD/dist/SectorRec-${VERSION}-Linux-${PUBLIC_ARCH}.AppImage"
 "$APPIMAGETOOL_BIN" "$APPDIR" "$image"
 # Test the EXACT packaged artifact: extract it to avoid FUSE, launch its frozen
 # Python under a virtual screen and force-load *bundled* BLT and BLTlite.
@@ -240,6 +256,9 @@ if command -v xvfb-run >/dev/null 2>&1; then
   smoke_dir="$(mktemp -d)"
   (cd "$smoke_dir" && "$image" --appimage-extract >/dev/null)
   xvfb-run -a "$smoke_dir/squashfs-root/AppRun" --check-tk-runtime
+  # Also launch the frozen GUI as sudo does: via its separate askpass wrapper.
+  # A plain Tk check does not catch child bootloader/BLT lookup failures.
+  xvfb-run -a "$smoke_dir/squashfs-root/AppRun" --check-askpass-subprocess
   rm -rf "$smoke_dir"
 else
   echo "WARNING: xvfb-run missing; cannot verify the frozen GUI on this host" >&2

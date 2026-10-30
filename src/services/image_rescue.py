@@ -16,6 +16,7 @@ from datetime import datetime
 from pathlib import Path
 from src.services.signature import ensure_different_disk
 from src.infrastructure.privileged import stop_proc, privileged_command, isolated_process_group
+from src.infrastructure.appimage_environment import host_environment
 
 RESERVE = 128 * 1024 * 1024
 
@@ -304,7 +305,7 @@ class ImageWorker(threading.Thread):
             import tempfile
             with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
                 self.proc=subprocess.Popen(cmd, stdout=output, stderr=errors,
-                                           **isolated_process_group())
+                                           env=host_environment(), **isolated_process_group())
                 while self.proc.poll() is None:
                     if self.stop_event.wait(0.35):
                         stop_proc(self.proc)

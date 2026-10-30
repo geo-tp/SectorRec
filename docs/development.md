@@ -70,8 +70,8 @@ The application version is `src.__version__` (`src/__init__.py`). Packaging scri
 | Debian/Ubuntu x86-64 desktop | `./build-deb.sh amd64 desktop` | `SectorRec-1.0-Linux-amd64.deb` |
 | Debian/Ubuntu ARM64 desktop | `./build-deb.sh arm64 desktop` | `SectorRec-1.0-Linux-arm64.deb` |
 | Cardputer Zero ARM64 | `./build-deb.sh arm64 cardputer` | `SectorRec-1.0-Cardputer-Zero-arm64.deb` |
-| Linux portable desktop | `./build-appimage-local.sh` | `.AppImage` (disk images and physical drives with interactive authorization) |
-| Windows x64 | `powershell -ExecutionPolicy Bypass -File .\build-windows.ps1` | `.exe`, `.zip` |
+| Linux portable desktop | `./build-appimage-local.sh` | `SectorRec-1.0-Linux-amd64.AppImage` / `SectorRec-1.0-Linux-arm64.AppImage` (build on matching architecture) |
+| Windows x64 | `powershell -ExecutionPolicy Bypass -File .\build-windows.ps1` | `SectorRec-1.0-Windows-x64-Portable.zip` (installer via `build-windows-installer.ps1`) |
 
 Debian packaging uses the standard Debhelper/pybuild source package under `debian/`. Build on a native Debian-compatible AMD64 or ARM64 machine using `dpkg-buildpackage` (or `./build-deb.sh`). On ARM64, the same source build also compiles the native AArch64 pixel565 framebuffer library. Both desktop `.deb` files install Tkinter, Sleuth Kit, TestDisk (including PhotoRec), and GNU ddrescue as dependencies. The Cardputer interface does not offer PhotoRec or ddrescue and does not require Tk; it includes the native framebuffer blitter and APPLaunch registration. Its TestDisk dependency also supplies the PhotoRec binary.
 
