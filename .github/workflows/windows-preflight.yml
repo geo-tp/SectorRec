@@ -1,0 +1,46 @@
+name: Windows EXE build test
+
+# Push only a disposable test branch, without publishing a GitHub Release.
+# This job runs on a real Windows runner and packages the actual .exe.
+on:
+  push:
+    branches:
+      - 'windows-test/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build + smoke-test Windows x64
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Build executable and run smoke test
+        shell: pwsh
+        run: ./build-windows.ps1 -PythonExe python
+      - name: Build Windows setup installer
+        shell: pwsh
+        run: ./build-windows-installer.ps1
+      - name: Upload Windows test build
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SectorRec-Windows-x64-test
+          retention-days: 7
+          if-no-files-found: error
+          path: |
+            dist/SectorRec.exe
+            dist/SectorRec-*-Windows-x64.zip
+            dist/SectorRec-*-Windows-x64-Setup.exe
+            dist/SectorRec-Cygwin-GPL-sources.zip
+            dist/SectorRec-Windows-thirdparty-sources.zip
+            dist/THIRD_PARTY_NOTICES.txt
