@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SectorRec — Easy, Free File Recovery for Linux &amp; Windows</title>
+  <meta name="description" content="Easy, free and open source file recovery software for Linux and Windows. Recover deleted files with guided steps. No technical knowledge or commands needed.">
+  <meta name="robots" content="max-image-preview:large">
+  <meta name="theme-color" content="#234c70">
+  <link rel="canonical" href="https://geo-tp.github.io/SectorRec/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SectorRec">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="SectorRec — File recovery, made simple">
+  <meta property="og:description" content="Recover deleted files with a few guided steps. No technical knowledge or command line needed. Free and open source for Linux and Windows.">
+  <meta property="og:url" content="https://geo-tp.github.io/SectorRec/">
+  <meta property="og:image" content="https://geo-tp.github.io/SectorRec/assets/sectorrec-social.jpg">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="SectorRec: file recovery for USB drives, SD cards, hard drives, SSDs and disk images">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SectorRec",
+    "url": "https://geo-tp.github.io/SectorRec/",
+    "description": "Easy, free and open source file recovery software for Linux and Windows. A guided desktop interface with no technical knowledge or command line needed.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Linux; Windows 10/11 x64",
+    "softwareVersion": "1.0",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": 0,
+      "url": "https://github.com/geo-tp/SectorRec/releases/latest"
+    },
+    "downloadUrl": "https://github.com/geo-tp/SectorRec/releases/latest",
+    "image": "https://geo-tp.github.io/SectorRec/assets/sectorrec-social.jpg",
+    "screenshot": "https://geo-tp.github.io/SectorRec/assets/desktop-methods.webp"
+  }
+  </script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="utility">
+    <span>Free &amp; open source file recovery</span>
+    <span><span class="utility-detail">The SectorRec project &nbsp;·&nbsp; </span>Version 1.0</span>
+  </div>
+  <div class="site">
+    <header>
+      <div class="masthead">
+        <a href="./" aria-label="SectorRec home"><img src="assets/banner-devices-1080.webp" srcset="assets/banner-devices-640.webp 640w, assets/banner-devices-1080.webp 1080w, assets/banner-devices-2126.webp 2126w" sizes="(max-width: 620px) 100vw, (max-width: 1100px) calc(100vw - 30px), 1078px" width="2126" height="335" alt="SectorRec — File recovery. Really simple. USB drive, SD card, HDD, SSD and disk images." fetchpriority="high"></a>
+      </div>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="./" aria-current="page">Overview</a>
+        <a href="#downloads">Downloads</a>
+        <a href="recovery-guide.html">Recovery guide</a>
+        <a class="project-link" href="https://github.com/geo-tp/SectorRec">GitHub project ↗</a>
+      </nav>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Project and recovery links">
+        <div class="side-group">
+          <p class="side-heading">SectorRec</p>
+          <nav aria-label="On this page"><ul class="side-nav">
+            <li><a href="./" aria-current="page">About SectorRec</a></li>
+            <li><a href="#interface">Desktop interface</a></li>
+            <li><a href="#quick-start">Getting started</a></li>
+            <li><a href="#which-method">Which method to use</a></li>
+            <li><a href="#disk-image-workflow">Work from a disk image</a></li>
+            <li><a href="#compatibility">Supported drives &amp; files</a></li>
+            <li><a href="#downloads">Download &amp; install</a></li>
+          </ul></nav>
+        </div>
+        <div class="side-group">
+          <p class="side-heading">Recovery handbook</p>
+          <nav aria-label="Recovery topics"><ul class="side-nav">
+            <li><a href="recovery-guide.html#system-drive">System disk &amp; live USB</a></li>
+            <li><a href="recovery-guide.html#usb-sd-cards">USB &amp; SD card recovery</a></li>
+            <li><a href="recovery-guide.html#formatted-drive">Formatted or RAW drive</a></li>
+            <li><a href="recovery-guide.html#linux-windows">Linux &amp; Windows</a></li>
+            <li><a href="recovery-guide.html#metadata"><span class="number">01</span> Deleted file records</a></li>
+            <li><a href="recovery-guide.html#signatures"><span class="number">02</span> File signatures</a></li>
+            <li><a href="recovery-guide.html#partitions"><span class="number">03</span> Lost partitions</a></li>
+            <li><a href="recovery-guide.html#disk-images"><span class="number">04</span> Disk images</a></li>
+            <li><a href="recovery-guide.html#limits">SSD, TRIM &amp; limits</a></li>
+            <li><a href="recovery-guide.html#questions">Common questions</a></li>
+          </ul></nav>
+        </div>
+        <div class="side-extra">
+          <hr>
+          <span class="release-label">SectorRec 1.0</span>
+          <p>Linux desktop<br>AMD64 &amp; ARM64</p>
+          <p>Windows 10 / 11<br><span class="side-caption">Full desktop · x64</span></p>
+          <a href="https://github.com/geo-tp/SectorRec/releases/latest">Release notes ↗</a>
+          <hr>
+          <p class="side-heading">Under the hood</p>
+          <ul class="side-nav">
+            <li><a href="https://www.sleuthkit.org/">The Sleuth Kit ↗</a></li>
+            <li><a href="https://www.cgsecurity.org/wiki/PhotoRec">PhotoRec ↗</a></li>
+            <li><a href="https://www.cgsecurity.org/wiki/TestDisk">TestDisk ↗</a></li>
+            <li><a href="https://www.gnu.org/software/ddrescue/">GNU ddrescue ↗</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content" id="main">
+        <p class="eyebrow">SectorRec · Free &amp; open source</p>
+        <div class="intro">
+          <div>
+            <h1 class="overview-title">File recovery. Made simple.</h1>
+            <p class="lead">Recover deleted files with a few guided steps. <strong>No technical knowledge or command line needed.</strong></p>
+            <p>Free and open source for Linux and Windows. SectorRec helps you recover files from hard drives, USB sticks, SD cards and disk images, with clear explanations along the way.</p>
+          </div>
+          <div class="download-box">
+            <p class="version">SectorRec 1.0</p>
+            <a class="button" href="#downloads" aria-label="Free download of SectorRec: choose a package">Free download <span aria-hidden="true">↓</span></a>
+            <p>Linux · Windows 10 / 11</p>
+            <a class="small" href="https://github.com/geo-tp/SectorRec">Open source on GitHub ↗</a>
+          </div>
+        </div>
+
+        <section class="section" id="interface" aria-labelledby="interface-title">
+          <div class="section-heading">
+            <h2 id="interface-title">Designed to be easy from the first screen</h2>
+            <a href="assets/desktop-methods.webp">View full-size screenshot ↗</a>
+          </div>
+          <p>Select your drive, read what each method does, choose where to save the files and follow the progress in one window. SectorRec handles the commands for <a href="https://www.cgsecurity.org/wiki/PhotoRec">PhotoRec</a>, <a href="https://www.sleuthkit.org/">The Sleuth Kit</a>, <a href="https://www.cgsecurity.org/wiki/TestDisk">TestDisk</a> and <a href="https://www.gnu.org/software/ddrescue/">GNU ddrescue</a> behind the scenes.</p>
+          <figure class="screenshot">
+            <a href="assets/desktop-methods.webp" aria-label="Open the SectorRec desktop screenshot at full size"><img src="assets/desktop-methods-800.webp" srcset="assets/desktop-methods-480.webp 480w, assets/desktop-methods-800.webp 800w, assets/desktop-methods.webp 1210w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 232px), (max-width: 1100px) calc(100vw - 268px), 824px" width="1210" height="865" alt="SectorRec's current method selection screen for the fictional Photos USB volume: metadata recovery, signature recovery and disk imaging." loading="lazy" decoding="async"></a>
+            <figcaption>The current desktop interface, showing recovery methods for the fictional Photos volume (48 GB) on a USB drive.</figcaption>
+          </figure>
+          <ul class="feature-list">
+            <li><strong>Choose the files you need.</strong> Browse and filter metadata results before extracting selected files.</li>
+            <li><strong>Scan an existing disk image.</strong> Open <code>.img</code>, <code>.dd</code>, <code>.raw</code> or <code>.bin</code> files as a source.</li>
+            <li><strong>Resume an interrupted image.</strong> Keep the image, recovery map and source identity together.</li>
+            <li><strong>Inspect the device first.</strong> View device details and SMART information when available.</li>
+          </ul>
+          <p class="small muted" style="margin-top: 16px">PhotoRec saves matching files during the scan; its live list monitors progress. SectorRec uses TestDisk for discovery without rewriting the partition table.</p>
+        </section>
+
+        <section class="section" id="quick-start" aria-labelledby="quick-start-title">
+          <h2 id="quick-start-title">Your first recovery, step by step</h2>
+          <ol class="quick-steps">
+            <li><strong>Choose your drive.</strong> Select the disk, USB stick, memory card or disk image you want to scan.</li>
+            <li><strong>Follow the on-screen guidance.</strong> SectorRec explains the available methods so you can choose one for your situation.</li>
+            <li><strong>Save your recovered files.</strong> Set a folder on a different physical disk before starting, then review the results and check the recovered copies.</li>
+          </ol>
+          <p class="small"><a href="recovery-guide.html#recovery-steps">Follow the complete recovery walkthrough →</a></p>
+          <h3>Review the filenames before saving</h3>
+          <p>After a metadata scan, narrow the results by category or extension. Recover the selected file, or all files matching your filter. Names and paths can help you choose what to save; check the recovered copies afterwards.</p>
+          <figure class="screenshot">
+            <a href="assets/desktop-results.webp" aria-label="Open the metadata results screenshot at full size"><img src="assets/desktop-results-800.webp" srcset="assets/desktop-results-480.webp 480w, assets/desktop-results-800.webp 800w, assets/desktop-results.webp 1100w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 232px), (max-width: 1100px) calc(100vw - 268px), 824px" width="1100" height="760" alt="SectorRec metadata results with the PHOTOS filter: six fictional photos with original paths and sizes, and buttons to recover one selected file or all filtered files." loading="lazy" decoding="async"></a>
+            <figcaption>Demo results: the PHOTOS filter shows six files, with holiday.jpg selected. <a href="assets/desktop-results.webp">View full-size screenshot ↗</a> · <a href="recovery-guide.html#metadata">How metadata recovery works →</a></figcaption>
+          </figure>
+        </section>
+
+        <section class="section" id="which-method" aria-labelledby="method-title">
+          <div class="section-heading">
+            <h2 id="method-title">Choose a file recovery method</h2>
+            <a href="recovery-guide.html">Read the recovery guide →</a>
+          </div>
+          <p>Start with what happened to your files. SectorRec explains each option before you begin; you do not need to know how the recovery tools work.</p>
+          <p class="table-hint">Scroll the table sideways for more details →</p>
+          <div class="table-scroll" role="region" aria-label="Recovery methods by situation; scroll horizontally on small screens" tabindex="0">
+            <table class="method-table">
+              <thead><tr><th scope="col">What happened?</th><th scope="col">Where to start</th><th scope="col">What it does</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Files were deleted, but the drive still opens.</th><td><a href="recovery-guide.html#metadata">File records</a><small>Sleuth Kit</small></td><td>Find files through the information the drive kept about them. Names and folders may survive.</td></tr>
+                <tr><th scope="row">The drive was formatted, or its file list is unreadable.</th><td><a href="recovery-guide.html#signatures">File contents</a><small>PhotoRec signatures</small></td><td>Look for recognizable file contents, usually without original names.</td></tr>
+                <tr><th scope="row">A partition has disappeared.</th><td><a href="recovery-guide.html#partitions">Partition search</a><small>TestDisk</small></td><td>Locate missing volumes and inspect their files if readable.</td></tr>
+                <tr><th scope="row">The drive has read errors, or you want a working copy.</th><td><a href="recovery-guide.html#disk-images">Disk image</a><small>GNU ddrescue</small></td><td>Copy readable areas to an image, with a record of progress for resuming.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <figure class="method-comparison">
+            <a href="assets/sleuth-kit-vs-photorec.webp" aria-label="Open the Sleuth Kit and PhotoRec comparison at full size"><img src="assets/sleuth-kit-vs-photorec.webp" width="800" height="400" alt="Sleuth Kit uses file records and may preserve names and folders. PhotoRec searches for file signatures, including beyond visible partitions, usually without the original names or folders." loading="lazy" decoding="async"></a>
+            <figcaption>The two file recovery methods at a glance. A missing partition can also be located first with TestDisk, then scanned for file records if its filesystem is readable. <a href="recovery-guide.html#comparison">Read the full comparison →</a></figcaption>
+          </figure>
+          <p class="small muted">Recovery depends on what is still readable. Overwritten data cannot be brought back by changing scan methods.</p>
+        </section>
+
+        <section class="section" id="disk-image-workflow" aria-labelledby="disk-image-workflow-title">
+          <h2 id="disk-image-workflow-title">Work from a disk image</h2>
+          <p>Make a reusable copy of readable disk data, then run recovery scans on that file. SectorRec uses GNU ddrescue to create the image and keep a record of copied areas, so an interrupted copy can resume.</p>
+          <ol class="quick-steps">
+            <li><strong>Copy the source.</strong> Select the whole disk, choose <em>Create a disk image</em>, then pick a folder on a different physical drive with enough free space.</li>
+            <li><strong>Keep the recovery files together.</strong> The <code>.img</code>, <code>.map</code> and <code>.source.json</code> belong to the same copy. Use <em>Resume an incomplete image…</em> with the same original source if needed.</li>
+            <li><strong>Scan the image.</strong> Return to the source list and choose <em>Open disk image…</em>. Select the image, then choose a recovery method. Mounting it is optional.</li>
+          </ol>
+          <figure class="screenshot">
+            <a href="assets/desktop-image-setup.webp" aria-label="Open the disk image setup screenshot at full size"><img src="assets/desktop-image-setup-800.webp" srcset="assets/desktop-image-setup-480.webp 480w, assets/desktop-image-setup-800.webp 800w, assets/desktop-image-setup.webp 1100w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 232px), (max-width: 1100px) calc(100vw - 268px), 824px" width="1100" height="760" alt="SectorRec disk imaging setup for a fictional 64 GB Photo USB, with an Images folder on Backup SSD, 400 GB available and a Resume an incomplete image button." loading="lazy" decoding="async"></a>
+            <figcaption>Demo setup: copy the 64 GB Photo USB to Backup SSD. SectorRec shows the required space and estimated space remaining before imaging starts. <a href="assets/desktop-image-setup.webp">View full-size screenshot ↗</a></figcaption>
+          </figure>
+          <p class="small" style="margin-top: 16px"><a href="recovery-guide.html#disk-images">Create, resume and scan a disk image — complete walkthrough →</a></p>
+        </section>
+
+        <section class="section" id="compatibility" aria-labelledby="compatibility-title">
+          <h2 id="compatibility-title">Supported drives, files and filesystems</h2>
+          <div class="table-scroll" role="region" aria-label="SectorRec recovery sources and supported formats" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">What you can scan</th><th scope="col">Support and practical limits</th></tr></thead>
+              <tbody>
+                <tr><th scope="row"><strong>Hard drives &amp; removable media</strong></th><td>Internal and external HDDs, USB flash drives and SD or microSD cards exposed to the computer as disks. SSD recovery depends on whether deleted data remains readable after TRIM.</td></tr>
+                <tr><th scope="row"><strong>System disks &amp; partitions</strong></th><td>Read-only file scans are supported on the desktop. Imaging and lost-partition searches are disabled on the active system disk. Use <a href="recovery-guide.html#system-drive">another PC or a bootable live USB</a> for those operations and to reduce background writes.</td></tr>
+                <tr><th scope="row"><strong>Filesystem records</strong></th><td>Metadata recovery on recognized FAT12/16/32, exFAT, NTFS and ext2/3/4 filesystems. Support for reading a filesystem does not guarantee that its deleted files can be reconstructed.</td></tr>
+                <tr><th scope="row"><strong>Photos, documents &amp; other files</strong></th><td>Browse metadata results by file type, or use PhotoRec's signature families for photos, video, audio, documents and archives. Recovery depends on the remaining data and the selected method.</td></tr>
+                <tr><th scope="row"><strong>Disk image files</strong></th><td>Open raw images such as <code>.img</code>, <code>.dd</code>, <code>.raw</code> and <code>.bin</code>. Both Linux and Windows can scan images without mounting them.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small">Need help with a particular source? Read about <a href="recovery-guide.html#usb-sd-cards">USB and SD card recovery</a>, <a href="recovery-guide.html#formatted-drive">formatted or RAW drives</a>, or <a href="recovery-guide.html#linux-windows">recovering files on Linux and Windows</a>.</p>
+        </section>
+
+        <section class="section" id="downloads" aria-labelledby="downloads-title">
+          <div class="section-heading">
+            <h2 id="downloads-title">Download SectorRec</h2>
+            <a href="https://github.com/geo-tp/SectorRec/releases/latest">All release files ↗</a>
+          </div>
+          <p>Version <strong>1.0</strong>. <strong>Free to download and use.</strong> Choose the package for your system. SectorRec is open source, with <a href="https://github.com/geo-tp/SectorRec">source code</a> and downloads hosted on GitHub.</p>
+          <img class="platform-banner" src="assets/platforms-720.webp" srcset="assets/platforms-480.webp 480w, assets/platforms-720.webp 720w, assets/platforms-1440.webp 1440w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 800px) calc(100vw - 232px), (max-width: 988px) calc(100vw - 268px), 720px" width="1440" height="480" alt="SectorRec for Windows, Linux AMD64 and Linux ARM64." loading="lazy" decoding="async">
+          <p class="download-help"><strong>Choose the version for your computer.</strong> Use an installer to add SectorRec to your system, or choose Portable to run without installing it.</p>
+          <div class="table-scroll" role="region" aria-label="SectorRec downloads by operating system, architecture and package type">
+            <table class="download-table">
+              <thead><tr><th scope="col">System &amp; architecture</th><th scope="col">Installer</th><th scope="col">Portable · no installation</th></tr></thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="download-system"><strong>Windows</strong><span class="architecture-badge">x64 / AMD64</span><small>Windows 10 / 11 · Intel or AMD PC</small></th>
+                  <td class="download-install"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec-1.0-Windows-x64-Setup.exe" aria-label="Download Windows x64 setup installer EXE"><strong>Setup .exe <span aria-hidden="true">↓</span></strong><small>Install SectorRec</small></a></td>
+                  <td class="download-portable"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec.exe" aria-label="Download Windows x64 portable EXE"><strong>Portable .exe <span aria-hidden="true">↓</span></strong><small>Run directly</small></a></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="download-system"><strong>Linux desktop</strong><span class="architecture-badge">AMD64</span><small>Intel or AMD PC · Debian / Ubuntu</small></th>
+                  <td class="download-install"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec-1.0-Linux-amd64.deb" aria-label="Download Linux AMD64 installer DEB"><strong>DEB .deb <span aria-hidden="true">↓</span></strong><small>Install package</small></a></td>
+                  <td class="download-portable" id="appimage-download"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec_1.0_x86_64.AppImage" aria-label="Download Linux AMD64 portable AppImage"><strong>AppImage <span aria-hidden="true">↓</span></strong><small>Run directly</small></a></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="download-system"><strong>Linux desktop</strong><span class="architecture-badge">ARM64</span><small>Raspberry Pi or ARM computer · 64-bit Linux</small></th>
+                  <td class="download-install"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec-1.0-Linux-arm64.deb" aria-label="Download Linux ARM64 installer DEB"><strong>DEB .deb <span aria-hidden="true">↓</span></strong><small>Install package</small></a></td>
+                  <td class="download-portable"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec_1.0_aarch64.AppImage" aria-label="Download Linux ARM64 portable AppImage"><strong>AppImage <span aria-hidden="true">↓</span></strong><small>Run directly</small></a></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="download-system"><strong>Cardputer Zero</strong><span class="architecture-badge">ARM64</span><small>Dedicated handheld edition · <a href="#cardputer-edition">Included functions</a></small></th>
+                  <td class="download-install"><a class="download-link" href="https://github.com/geo-tp/SectorRec/releases/latest/download/SectorRec-1.0-Cardputer-Zero-arm64.deb" aria-label="Download Cardputer Zero ARM64 installer DEB"><strong>DEB .deb <span aria-hidden="true">↓</span></strong><small>Cardputer edition</small></a></td>
+                  <td class="download-portable"><span class="download-unavailable">Not available</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small"><strong>Not sure which architecture?</strong> Most Windows and Linux PCs use <strong>AMD64</strong> (also called x64 / x86_64, including Intel PCs). Raspberry Pi and other ARM computers use <strong>ARM64</strong> (aarch64) when running a 64-bit OS. Choose the architecture of the computer running SectorRec, not the drive you want to recover.</p>
+          <p class="small">All desktop downloads provide the same recovery and disk imaging functions. <strong>Mounting an image read-only is available on Linux only</strong>; image scanning works on both systems without mounting.</p>
+          <details>
+            <summary>How to open your download</summary>
+            <p><strong>Windows Setup:</strong> open the file ending in <code>-Setup.exe</code>, follow the installer, then launch SectorRec from the Start menu. <strong>Windows Portable:</strong> open <code>SectorRec.exe</code> directly. Both versions request administrator permission when a physical-disk operation needs it.</p>
+            <p><strong>Linux DEB:</strong> open the <code>.deb</code> with your software installer. It installs SectorRec and its required recovery tools; downloading dependencies may need an internet connection.</p>
+            <p><strong>Linux AppImage:</strong> in the file's properties, allow it to run as a program, then open it. It provides the full recovery workflow for physical drives and disk images.</p>
+          </details>
+          <details>
+            <summary>About the Cardputer Zero edition</summary>
+            <p id="cardputer-edition">A lightweight ARM64 edition for the Cardputer Zero's screen and keyboard, with metadata recovery and partition discovery. PhotoRec, disk imaging and active system-disk recovery are desktop features. The Cardputer package and the ARM64 desktop DEB are alternative editions.</p>
+          </details>
+        </section>
+
+        <section class="section" aria-labelledby="guide-title">
+          <div class="handbook-promo">
+            <div class="book-symbol" aria-hidden="true">Aa<span>GUIDE</span></div>
+            <div>
+              <h2 id="guide-title">A little reading before the first scan</h2>
+              <p>Why do some recovered files keep their names? What does a disk image preserve? And why can an SSD behave differently from a hard drive?</p>
+              <p><a href="recovery-guide.html"><strong>File recovery: methods, practical steps and limits →</strong></a></p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <p>SectorRec · A project by <a href="https://github.com/geo-tp">geo-tp</a></p>
+      <p><a href="https://github.com/geo-tp/SectorRec">Source code</a><a href="https://github.com/geo-tp/SectorRec/issues">Report an issue</a><a href="#top">Back to top ↑</a></p>
+    </footer>
+  </div>
+  <p class="colophon">Built around <a href="https://www.sleuthkit.org/">The Sleuth Kit</a>, <a href="https://www.cgsecurity.org/">TestDisk &amp; PhotoRec</a> and <a href="https://www.gnu.org/software/ddrescue/">GNU ddrescue</a>.</p>
+</body>
+</html>

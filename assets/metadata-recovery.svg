@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 238" width="340" height="238">
+  <title>Metadata recovery follows a surviving file record</title>
+  <desc>A record for holiday.jpg points to its data blocks on disk. If both survive, the file may be recovered with its name.</desc>
+  <rect x=".5" y=".5" width="339" height="237" fill="#fff" stroke="#ccd5dd"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#263d50">
+    <text x="18" y="28" font-size="15" font-weight="700">1. Follow the file record</text>
+    <rect x="18" y="43" width="304" height="43" fill="#edf4fa" stroke="#a8bfd2"/>
+    <text x="31" y="69" font-family="Courier New, monospace" font-size="14">holiday.jpg → blocks 3, 4, 5</text>
+    <path d="M170 88v24m-5-6 5 6 5-6" fill="none" stroke="#577b99" stroke-width="2"/>
+    <g stroke="#7897ae">
+      <rect x="18" y="119" width="36" height="34" fill="#edf1f4"/>
+      <rect x="62" y="119" width="36" height="34" fill="#edf1f4"/>
+      <rect x="106" y="119" width="36" height="34" fill="#c5def1"/>
+      <rect x="150" y="119" width="36" height="34" fill="#c5def1"/>
+      <rect x="194" y="119" width="36" height="34" fill="#c5def1"/>
+      <rect x="238" y="119" width="36" height="34" fill="#edf1f4"/>
+      <rect x="282" y="119" width="36" height="34" fill="#edf1f4"/>
+    </g>
+    <g font-size="13" text-anchor="middle"><text x="36" y="141">1</text><text x="80" y="141">2</text><text x="124" y="141">3</text><text x="168" y="141">4</text><text x="212" y="141">5</text><text x="256" y="141">6</text><text x="300" y="141">7</text></g>
+    <path d="M170 157v23m-5-6 5 6 5-6" fill="none" stroke="#577b99" stroke-width="2"/>
+    <text x="170" y="202" font-family="Courier New, monospace" font-size="15" text-anchor="middle">holiday.jpg</text>
+    <text x="170" y="222" fill="#5a6773" font-size="12" text-anchor="middle">The original name may be kept.</text>
+  </g>
+</svg>

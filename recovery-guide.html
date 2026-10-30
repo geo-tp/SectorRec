@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Recover Deleted Files: USB, SD &amp; HDD | SectorRec</title>
+  <meta name="description" content="Deleted files, formatted USB or unreadable disk? Follow simple SectorRec recovery steps, choose the right scan and protect your files.">
+  <meta name="robots" content="max-image-preview:large">
+  <meta name="theme-color" content="#234c70">
+  <link rel="canonical" href="https://geo-tp.github.io/SectorRec/recovery-guide.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="SectorRec">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="How to recover deleted files with SectorRec">
+  <meta property="og:description" content="A simple, step-by-step file recovery guide. Find out what to do after deleting files, formatting a USB or losing access to a disk.">
+  <meta property="og:url" content="https://geo-tp.github.io/SectorRec/recovery-guide.html">
+  <meta property="og:image" content="https://geo-tp.github.io/SectorRec/assets/sectorrec-social.jpg">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="SectorRec file recovery for disks, cards and disk images">
+  <meta property="article:published_time" content="2026-10-28">
+  <meta property="article:modified_time" content="2026-10-30">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to recover deleted files",
+    "description": "Recover deleted files with SectorRec: protect the source, choose a method, and save recovered files safely on Linux or Windows.",
+    "inLanguage": "en",
+    "datePublished": "2026-10-28",
+    "dateModified": "2026-10-30",
+    "author": {"@type": "Organization", "name": "SectorRec", "url": "https://github.com/geo-tp/SectorRec"},
+    "publisher": {"@type": "Organization", "name": "SectorRec", "url": "https://geo-tp.github.io/SectorRec/"},
+    "mainEntityOfPage": "https://geo-tp.github.io/SectorRec/recovery-guide.html",
+    "image": "https://geo-tp.github.io/SectorRec/assets/sectorrec-social.jpg"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "SectorRec", "item": "https://geo-tp.github.io/SectorRec/"},
+      {"@type": "ListItem", "position": 2, "name": "Recovery guide", "item": "https://geo-tp.github.io/SectorRec/recovery-guide.html"}
+    ]
+  }
+  </script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="utility">
+    <span>Free &amp; open source file recovery</span>
+    <span><span class="utility-detail">The SectorRec project &nbsp;·&nbsp; </span>Version 1.0</span>
+  </div>
+  <div class="site">
+    <header>
+      <div class="masthead">
+        <a href="./" aria-label="SectorRec home"><img src="assets/banner-devices-1080.webp" srcset="assets/banner-devices-640.webp 640w, assets/banner-devices-1080.webp 1080w, assets/banner-devices-2126.webp 2126w" sizes="(max-width: 620px) 100vw, (max-width: 1100px) calc(100vw - 30px), 1078px" width="2126" height="335" alt="SectorRec — File recovery. Really simple. USB drive, SD card, HDD, SSD and disk images." fetchpriority="high"></a>
+      </div>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="./">Overview</a>
+        <a href="./#downloads">Downloads</a>
+        <a href="recovery-guide.html" aria-current="page">Recovery guide</a>
+        <a class="project-link" href="https://github.com/geo-tp/SectorRec">GitHub project ↗</a>
+      </nav>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Guide contents">
+        <div class="side-group">
+          <p class="side-heading">In this guide</p>
+          <nav aria-label="Article sections"><ul class="side-nav">
+            <li><a href="#before-you-start">First: protect your files</a></li>
+            <li><a href="#find-your-situation">Find your situation</a></li>
+            <li><a href="#recovery-steps">Recovery in 4 steps</a></li>
+            <li><a href="#system-drive">Windows C: / system disk</a></li>
+            <li><a href="#usb-sd-cards">USB &amp; SD cards</a></li>
+            <li><a href="#formatted-drive">Formatted / RAW drive</a></li>
+            <li><a href="#comparison">Which method?</a></li>
+            <li><a href="#disk-images">Disk images</a></li>
+            <li><a href="#linux-windows">Linux &amp; Windows</a></li>
+            <li><a href="#limits">What can be recovered?</a></li>
+            <li><a href="#questions">Questions</a></li>
+            <li><a href="#references">Sources</a></li>
+          </ul></nav>
+        </div>
+        <div class="side-group">
+          <p class="side-heading">The application</p>
+          <ul class="side-nav">
+            <li><a href="./">About SectorRec</a></li>
+            <li><a href="./#downloads">Download SectorRec</a></li>
+            <li><a href="https://github.com/geo-tp/SectorRec">Source code ↗</a></li>
+          </ul>
+        </div>
+        <div class="side-extra">
+          <hr>
+          <p class="side-heading">One rule to remember</p>
+          <p>Read from the affected disk. Save to a different physical disk.</p>
+          <p class="side-caption">A second partition on the same device is not a separate recovery destination.</p>
+        </div>
+      </aside>
+
+      <main class="content article" id="main">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a href="./">SectorRec</a><span aria-hidden="true">/</span>Recovery guide</nav>
+        <article>
+          <header>
+            <p class="eyebrow">File recovery · A practical guide</p>
+            <h1>How to recover deleted files</h1>
+            <p class="standfirst">Lost a file, formatted a USB drive, or can't open a disk? Start with your situation below. You don't need to know how recovery tools work.</p>
+            <p class="article-meta">SectorRec project &nbsp;·&nbsp; Updated <time datetime="2026-10-30">30 October 2026</time> &nbsp;·&nbsp; SectorRec 1.0</p>
+          </header>
+          <details class="mobile-toc">
+            <summary>Jump to a section</summary>
+            <nav aria-label="Article sections on mobile"><ul class="side-nav">
+              <li><a href="#before-you-start">Protect your files</a></li>
+              <li><a href="#find-your-situation">Find your situation</a></li>
+              <li><a href="#recovery-steps">Recovery in 4 steps</a></li>
+              <li><a href="#system-drive">System disk / live USB</a></li>
+              <li><a href="#usb-sd-cards">USB &amp; SD</a></li>
+              <li><a href="#formatted-drive">Formatted / RAW</a></li>
+              <li><a href="#comparison">Choose a method</a></li>
+              <li><a href="#disk-images">Disk images</a></li>
+              <li><a href="#linux-windows">Linux &amp; Windows</a></li>
+              <li><a href="#limits">Recovery limits</a></li>
+              <li><a href="#questions">Questions</a></li>
+              <li><a href="#references">Sources</a></li>
+            </ul></nav>
+          </details>
+
+          <section id="before-you-start" class="guide-first" aria-labelledby="before-title">
+            <h2 id="before-title">Before anything else</h2>
+            <div class="guide-rules">
+              <div class="guide-rule"><span class="guide-rule-icon" aria-hidden="true">!</span><p><strong>Stop using the affected drive.</strong> Don't add files, install software on it, or agree to format it.</p></div>
+              <div class="guide-rule"><span class="guide-rule-icon" aria-hidden="true">✓</span><p><strong>Check for an easy copy.</strong> Look in the Recycle Bin / Trash and your backups first.</p></div>
+              <div class="guide-rule"><span class="guide-rule-icon" aria-hidden="true">↗</span><p><strong>Save somewhere else.</strong> Use a different physical drive, not another partition on the same one.</p></div>
+            </div>
+            <div class="guide-drive-flow" role="img" aria-label="Read from your affected USB drive and save recovered files to a separate physical backup drive, not back to the USB drive.">
+              <div class="drive-pill"><span class="drive-icon" aria-hidden="true">▣</span><span><b>Damaged / deleted source</b><small>Read only</small></span></div>
+              <span class="flow-arrow" aria-hidden="true">→</span>
+              <div class="drive-pill drive-pill-good"><span class="drive-icon" aria-hidden="true">▤</span><span><b>Separate drive</b><small>Save recovered files here</small></span></div>
+            </div>
+            <p class="guide-alert"><strong>Drive clicking, disconnecting, or showing read errors?</strong> Don't keep restarting scans. See <a href="#disk-images">make a disk image</a>; for serious physical damage or irreplaceable data, seek professional help.</p>
+          </section>
+
+          <section id="find-your-situation" aria-labelledby="situation-title">
+            <h2 id="situation-title">What happened to your files?</h2>
+            <p class="guide-intro">Pick the closest situation. Each link takes you to the relevant advice.</p>
+            <div class="guide-choices">
+              <a class="guide-choice" href="#recovery-steps"><span class="choice-marker" aria-hidden="true">01</span><strong>I deleted files by mistake</strong><span>Start with a normal file scan.</span><span class="choice-link">See the 4 steps →</span></a>
+              <a class="guide-choice" href="#usb-sd-cards"><span class="choice-marker" aria-hidden="true">02</span><strong>My USB stick or SD card is empty</strong><span>Stop using it; check whether its files or partition can still be found.</span><span class="choice-link">USB / SD advice →</span></a>
+              <a class="guide-choice" href="#formatted-drive"><span class="choice-marker" aria-hidden="true">03</span><strong>Windows asks me to format the disk</strong><span>Cancel that prompt. Recovery may still be possible.</span><span class="choice-link">Formatted / RAW drive →</span></a>
+              <a class="guide-choice" href="#system-drive"><span class="choice-marker" aria-hidden="true">04</span><strong>The files were on Windows C: or my Linux system disk</strong><span>Protect them from background writes.</span><span class="choice-link">System disk advice →</span></a>
+            </div>
+          </section>
+
+          <section id="recovery-steps" aria-labelledby="steps-title">
+            <h2 id="steps-title">Recover your files in 4 steps</h2>
+            <ol class="guide-step-list">
+              <li><div class="step-body"><h3>Open SectorRec and select the source</h3><p>Find the drive by its <strong>name and size</strong>. For deleted files, select the partition they were on. If you're unsure, see <a href="#choose-source">disk or partition?</a></p></div></li>
+              <li><div class="step-body"><h3>Choose how to search</h3><p>Start with <strong>Recover by metadata (Sleuth Kit)</strong> for deleted files. If it finds little, try <strong>Recover by signatures (PhotoRec)</strong>. If a partition disappeared, use <strong>Find missing partitions (TestDisk)</strong>. <a href="#comparison">Compare the methods ↓</a></p></div></li>
+              <li><div class="step-body"><h3>Pick a safe destination and start</h3><p>Choose a folder on your <strong>other physical drive</strong>. Recover by signatures saves files during the scan; Recover by metadata lets you choose files afterwards.</p></div></li>
+              <li><div class="step-body"><h3>Check what you recovered</h3><p>Open important files, not just their thumbnails. A filename or preview doesn't guarantee the content is complete.</p></div></li>
+            </ol>
+            <div class="guide-previews">
+              <figure class="unframed screenshot">
+                <a href="assets/desktop-methods.webp" aria-label="Open the SectorRec recovery methods screen at full size"><img src="assets/desktop-methods-800.webp" srcset="assets/desktop-methods-480.webp 480w, assets/desktop-methods-800.webp 800w, assets/desktop-methods.webp 1210w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 45vw, 370px" width="1210" height="865" alt="SectorRec method selection screen showing Recover by metadata, Recover by signatures, and Create disk image." loading="lazy" decoding="async"></a>
+                <figcaption>Choose a recovery method.</figcaption>
+              </figure>
+              <figure class="unframed screenshot">
+                <a href="assets/desktop-results.webp" aria-label="Open the SectorRec recovered files results at full size"><img src="assets/desktop-results-800.webp" srcset="assets/desktop-results-480.webp 480w, assets/desktop-results-800.webp 800w, assets/desktop-results.webp 1100w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 45vw, 370px" width="1100" height="760" alt="SectorRec file results with recovered photo names, filters and recovery actions." loading="lazy" decoding="async"></a>
+                <figcaption>With Recover by metadata, choose which files to save after the scan.</figcaption>
+              </figure>
+            </div>
+            <div id="choose-source" class="guide-inline-note">
+              <h3>Whole disk or partition?</h3>
+              <p><strong>Partition:</strong> a section of a drive (like <code>C:</code> or <code>Photos</code>). Choose it for deleted files. <strong>Whole disk:</strong> the complete device. Choose it when a partition disappeared or when you need a full image.</p>
+              <figure class="unframed guide-image-small"><a href="assets/disk-and-partition-1536.webp" aria-label="View disk and partition example"><img src="assets/disk-and-partition-768.webp" srcset="assets/disk-and-partition-768.webp 768w, assets/disk-and-partition-1536.webp 1536w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 75vw, 650px" width="1536" height="1024" loading="lazy" decoding="async" alt="Example: Photo USB is one disk containing two partitions, while Backup SSD is a separate physical device."></a><figcaption>One USB drive can contain several partitions. The backup SSD is a different device.</figcaption></figure>
+            </div>
+            <p class="guide-cta"><a href="./#downloads">Get SectorRec for Linux or Windows →</a></p>
+          </section>
+
+          <section id="system-drive" aria-labelledby="system-title">
+            <h2 id="system-title">Files lost from Windows C: or your Linux system disk?</h2>
+            <p>The computer keeps writing to its system disk even when you're not saving anything. That can overwrite deleted files. <strong>Best option: recover from another computer or a live USB.</strong></p>
+            <div class="guide-options">
+              <div class="guide-option guide-option-best"><span class="guide-tag">Recommended</span><h3>Connect the disk to another PC</h3><p>Use it as a second drive. Start the other PC from <em>its own</em> disk, then scan the affected one.</p></div>
+              <div class="guide-option"><span class="guide-tag">Also good</span><h3>Start from a live USB</h3><p>Boot Linux from a USB stick without starting the installed system. Run SectorRec there.</p></div>
+              <div class="guide-option"><span class="guide-tag guide-tag-warn">Last resort</span><h3>Scan the running system</h3><p>SectorRec allows file scans after a warning, but the operating system may overwrite files while you work.</p></div>
+            </div>
+            <figure class="unframed guide-image-small">
+              <a href="assets/system-disk-recovery-1536.webp" aria-label="Open the system disk and separate backup device example"><img src="assets/system-disk-recovery-768.webp" srcset="assets/system-disk-recovery-768.webp 768w, assets/system-disk-recovery-1536.webp 1536w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 75vw, 650px" width="1536" height="1024" alt="Computer SSD and its C: and recovery partitions share one physical drive; Backup USB is a separate physical device." loading="lazy" decoding="async"></a>
+              <figcaption><strong>C:</strong> and another partition on the same SSD are <em>not</em> separate drives. Use the Backup USB for output.</figcaption>
+            </figure>
+            <details class="guide-more"><summary>How to use a live USB (3 steps)</summary>
+              <ol class="guide-short-list"><li>On <strong>another computer</strong>, prepare a Debian/Ubuntu live USB. <a href="https://documentation.ubuntu.com/desktop/en/latest/how-to/create-a-bootable-usb-stick/">Ubuntu's guide ↗</a></li>
+              <li>Boot the affected PC from that USB and choose <strong>Try Ubuntu</strong> (or equivalent). Avoid mounting or repairing the affected disk.</li>
+              <li>Run the compatible Linux desktop edition of SectorRec. Connect a <strong>second</strong> external drive for recovered files and follow the <a href="#recovery-steps">4 steps</a>.</li></ol>
+              <p><strong>Important:</strong> a temporary live session may have limited space for scan data. Keep working files on suitable writable storage and recovered files on the separate destination before shutting down.</p>
+            </details>
+            <p class="guide-tip"><strong>Note:</strong> SectorRec disables disk imaging and lost-partition searches on the active system disk. To use those features, boot from another drive.</p>
+          </section>
+
+          <section id="usb-sd-cards" aria-labelledby="usb-title">
+            <h2 id="usb-title">Recover files from a USB drive or SD card</h2>
+            <div class="guide-mini-steps"><p><b>1.</b><span>Unplug the USB stick or stop using the SD card in your camera or phone.</span></p><p><b>2.</b><span>Connect it to your PC, ideally through a card reader. Don't format it if prompted.</span></p><p><b>3.</b><span>Scan the recognizable partition with <a href="#metadata">Recover by metadata (Sleuth Kit)</a>. If it finds little, try <a href="#signatures">Recover by signatures (PhotoRec)</a>.</span></p></div>
+            <p class="guide-tip">For videos, check playback from beginning to end: a recovered thumbnail doesn't mean the whole video survived.</p>
+          </section>
+
+          <section id="formatted-drive" aria-labelledby="formatted-title">
+            <h2 id="formatted-title">Formatted drive or “You need to format the disk”?</h2>
+            <p><strong>Cancel the format prompt.</strong> A drive shown as <strong>RAW</strong> is one Windows can't currently read as a normal filesystem. That does <em>not</em> always mean the files are gone.</p>
+            <div class="guide-action-box">
+              <p><strong>Drive or partition missing?</strong><br><a href="#partitions">Find missing partitions (TestDisk)</a> may locate it.</p>
+              <p><strong>Partition visible, but folders unreadable?</strong><br><a href="#signatures">Recover by signatures (PhotoRec)</a> can search for files.</p>
+            </div>
+            <p>After a quick format, recovery may be possible if data remains. A full overwrite or secure erase cannot be reversed. <strong>Recover files before attempting repairs.</strong></p>
+          </section>
+
+          <section id="comparison" aria-labelledby="comparison-title">
+            <h2 id="comparison-title">Which recovery method should I choose?</h2>
+            <p class="guide-intro">You don't need to know the tools beforehand. Choose based on what you can still see on the drive.</p>
+            <div class="guide-methods">
+              <div class="guide-method" id="metadata">
+                <span class="method-id">1 · Try first</span><h3 id="metadata-title">Recover by metadata <small>(Sleuth Kit)</small></h3>
+                <p><strong>Use when:</strong> you deleted files and the partition still appears normally.</p>
+                <p><strong>What you get:</strong> a list to browse, often with original names and folders. Choose what to recover <em>after</em> the scan.</p>
+              </div>
+              <div class="guide-method" id="signatures">
+                <span class="method-id">2 · If needed</span><h3 id="signatures-title">Recover by signatures <small>(PhotoRec)</small></h3>
+                <p><strong>Use when:</strong> file records are missing, the drive was formatted, or Recover by metadata found too little.</p>
+                <p><strong>What you get:</strong> photos, documents and other recognized files, usually <em>without</em> original names. They are saved <em>during</em> the scan.</p>
+              </div>
+              <div class="guide-method" id="partitions">
+                <span class="method-id">3 · Missing volume</span><h3 id="partitions-title">Find missing partitions <small>(TestDisk)</small></h3>
+                <p><strong>Use when:</strong> a partition has disappeared, or the disk looks unallocated.</p>
+                <p><strong>What you get:</strong> possible partitions to inspect. SectorRec doesn't rewrite the partition table.</p>
+              </div>
+            </div>
+            <figure class="unframed method-comparison">
+              <a href="assets/sleuth-kit-vs-photorec.webp" aria-label="Open the method comparison illustration at full size"><img src="assets/sleuth-kit-vs-photorec.webp" width="800" height="400" alt="Comparison of Recover by metadata (Sleuth Kit), which can preserve original filenames, and Recover by signatures (PhotoRec), which finds files from their contents." loading="lazy" decoding="async"></a>
+              <figcaption>Two different ways to find files. Trying both can help when the source is stable.</figcaption>
+            </figure>
+            <details class="guide-more"><summary>See the difference with a real-looking example</summary>
+              <div class="diagram-pair guide-diagram-pair">
+                <img src="assets/metadata-recovery.svg" width="340" height="238" alt="File record links holiday.jpg to the blocks containing its data." loading="lazy">
+                <img src="assets/signature-recovery.svg" width="340" height="238" alt="Recover by signatures (PhotoRec) recognizes JPEG contents without the original filename." loading="lazy">
+              </div>
+              <p><strong>Example:</strong> Recover by metadata might show <code>holiday.jpg</code>; Recover by signatures may save it as <code>f0000123.jpg</code>. Neither can restore missing or overwritten data.</p>
+            </details>
+            <details class="guide-more"><summary>Recover by signatures (PhotoRec): should I filter file types?</summary>
+              <p><em>All supported formats</em> is the simplest starting point. Choose a narrower group only if you want to focus on certain kinds of files. These groups aren't exact extension filters, and Recover by signatures may also find older copies or files that were never deleted.</p>
+              <figure class="unframed screenshot"><a href="assets/desktop-signature-setup.webp" aria-label="View PhotoRec settings"><img src="assets/desktop-signature-setup-800.webp" srcset="assets/desktop-signature-setup-480.webp 480w, assets/desktop-signature-setup-800.webp 800w, assets/desktop-signature-setup.webp 1100w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 75vw, 650px" width="1100" height="760" alt="Recover by signatures (PhotoRec) settings, with a separate backup destination and file formats selected." loading="lazy" decoding="async"></a><figcaption>Choose a separate destination before starting Recover by signatures.</figcaption></figure>
+            </details>
+          </section>
+
+          <section id="disk-images" aria-labelledby="image-title">
+            <h2 id="image-title">Want to protect the original? Make a disk image</h2>
+            <p>A <strong>disk image</strong> is one large file containing a copy of a drive. You can scan that copy instead of repeatedly reading the original.</p>
+            <div class="guide-image-flow" aria-label="Copy drive to an image file, then scan the image using SectorRec">
+              <span><b>Original drive</b><small>Read it once</small></span><span aria-hidden="true">→</span><span><b>disk.img</b><small>On a separate drive</small></span><span aria-hidden="true">→</span><span><b>Recovery scan</b><small>Work on the copy</small></span>
+            </div>
+            <p>On supported Linux desktop builds, SectorRec uses <strong>GNU ddrescue</strong> to copy readable areas and resume interrupted copies. For a full image, the destination needs at least the <strong>capacity of the source drive</strong>, plus space for recovered files.</p>
+            <figure class="unframed screenshot guide-image-small"><a href="assets/desktop-image-setup.webp" aria-label="Open disk imaging example at full size"><img src="assets/desktop-image-setup-800.webp" srcset="assets/desktop-image-setup-480.webp 480w, assets/desktop-image-setup-800.webp 800w, assets/desktop-image-setup.webp 1100w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 75vw, 650px" width="1100" height="760" alt="SectorRec image setup for a 64 GB source drive, with output stored on a separate backup SSD and a Resume control." loading="lazy" decoding="async"></a><figcaption>Check the selected source, destination and free space before imaging.</figcaption></figure>
+            <details class="guide-more"><summary>How to resume an interrupted image</summary>
+              <p>Keep the <strong>image file</strong> (<code>.img</code>), its <strong>copy progress file</strong> (<code>.img.map</code>) and the <strong>source information</strong> (<code>.img.source.json</code>) together. Reconnect the same drive, open <em>Create disk image</em>, then choose <em>Resume an incomplete image…</em>. SectorRec checks the source before resuming.</p>
+            </details>
+            <details class="guide-more"><summary>How to scan an existing .img / .dd / .raw file</summary>
+              <p>Choose <em>Open disk image…</em> in SectorRec. Select the image and choose a recovery method as usual. You do <strong>not</strong> need to mount it. Linux desktop also offers optional read-only mounting for browsing files.</p>
+              <figure class="unframed screenshot"><a href="assets/desktop-image-source.webp" aria-label="Open disk image source screen"><img src="assets/desktop-image-source-800.webp" srcset="assets/desktop-image-source-480.webp 480w, assets/desktop-image-source-800.webp 800w, assets/desktop-image-source.webp 1100w" sizes="(max-width: 620px) calc(100vw - 40px), (max-width: 1100px) 75vw, 650px" width="1100" height="760" alt="SectorRec's drive list with an existing photo-usb.img disk image selected." loading="lazy" decoding="async"></a><figcaption>An image appears as another source you can scan.</figcaption></figure>
+            </details>
+            <p class="guide-tip"><strong>Important:</strong> if a drive clicks, repeatedly disconnects, or isn't detected, software imaging may make things worse. A recovery specialist is safer for important data.</p>
+          </section>
+
+          <section id="linux-windows" aria-labelledby="platform-title">
+            <h2 id="platform-title">Using SectorRec on Linux or Windows</h2>
+            <p>Download the edition for the <strong>computer running SectorRec</strong>, not for the filesystem on the drive. For example, Windows can scan a Linux-formatted disk if the recovery engine supports its filesystem.</p>
+            <div class="guide-platforms">
+              <p><strong>Windows 10/11 (64-bit):</strong> use the installer or portable EXE. Windows may request administrator access for physical drives.</p>
+              <p><strong>Linux (AMD64 / ARM64):</strong> choose the compatible desktop package. Linux desktop can also mount suitable disk images read-only.</p>
+            </div>
+            <p class="small muted">Features depend on the package and platform; in particular, disk image <em>creation</em> and scanning an <em>existing image</em> are different operations. See <a href="./#downloads">the editions and downloads</a>.</p>
+          </section>
+
+          <section id="limits" aria-labelledby="limits-title">
+            <h2 id="limits-title">Can my files actually be recovered?</h2>
+            <div class="guide-limit-grid">
+              <div><h3>Sometimes, yes</h3><p>Deleted files may still be present until their space is reused. A quick format may also leave old contents readable.</p></div>
+              <div><h3>Sometimes, no</h3><p>Overwritten or securely erased files cannot be rebuilt. On SSDs, <strong>TRIM</strong> can make deleted contents unreadable very quickly.</p></div>
+            </div>
+            <p class="guide-tip">A file appearing in the results is <strong>not a guarantee</strong>. Verify the recovered copy. Encrypted files also need the proper key.</p>
+          </section>
+
+          <section id="questions" class="faq guide-faq" aria-labelledby="questions-title">
+            <h2 id="questions-title">Quick answers</h2>
+            <details><summary>Can I recover files deleted from the Recycle Bin?</summary><p>Possibly. Emptying the Bin doesn't always erase the file contents immediately. Stop using the drive and try <a href="#metadata">Recover by metadata (Sleuth Kit)</a> first.</p></details>
+            <details><summary>Should I recover to D: instead of C:?</summary><p>Only if D: is on a <strong>different physical disk</strong>. Two partitions on the same SSD are not separate recovery destinations.</p></details>
+            <details><summary>Can I recover files without their original names?</summary><p>Recover by signatures (PhotoRec) can find recognizable file contents, but usually saves them under generated names.</p></details>
+            <details><summary>Can I recover files if my PC no longer boots?</summary><p>Often worth trying. Use <a href="#system-drive">another PC or a live USB</a> to access the disk. Don't reinstall Windows or Linux on the affected disk first.</p></details>
+            <details><summary>How long does a scan take?</summary><p>It depends on drive size, connection speed and read errors. A whole-disk Recover by signatures scan usually takes longer than scanning one partition.</p></details>
+            <details><summary>What if a recovered photo or video won't open?</summary><p>Its name may have survived while parts of its data didn't. Try the other method, but neither can restore overwritten content.</p></details>
+          </section>
+
+          <section id="references" aria-labelledby="references-title">
+            <h2 id="references-title">Further reading</h2>
+            <p class="small muted">Optional technical references from the recovery tool authors:</p>
+            <ul class="sources guide-sources">
+              <li><a href="https://www.sleuthkit.org/sleuthkit/man/fls.html">Recover by metadata (Sleuth Kit) — technical reference</a></li>
+              <li><a href="https://www.cgsecurity.org/wiki/PhotoRec">Recover by signatures (PhotoRec) — technical reference</a></li>
+              <li><a href="https://www.cgsecurity.org/wiki/TestDisk">Find missing partitions (TestDisk) — technical reference</a></li>
+              <li><a href="https://www.gnu.org/software/ddrescue/manual/ddrescue_manual.html">GNU ddrescue — image copies</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/windows/compatibility/new-api-allows-apps-to-send-trim-and-unmap-hints">Microsoft — SSD TRIM</a></li>
+            </ul>
+          </section>
+          <div class="article-end">
+            <img src="assets/sectorrec-brand-480.webp" srcset="assets/sectorrec-brand-480.webp 480w, assets/sectorrec-brand-960.webp 960w" sizes="(max-width: 340px) calc(100vw - 80px), 260px" width="2171" height="724" alt="SectorRec — File recovery. Really simple." loading="lazy" decoding="async">
+            <div>
+              <p><strong>Ready to recover your files?</strong><br>Free, open source, and guided on screen.</p>
+              <a class="button" href="./#downloads">Download SectorRec <span aria-hidden="true">↓</span></a>
+              <p class="back-link"><a href="./">Back to the overview →</a></p>
+            </div>
+          </div>
+        </article>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <p>SectorRec · A project by <a href="https://github.com/geo-tp">geo-tp</a></p>
+      <p><a href="https://github.com/geo-tp/SectorRec">Source code</a><a href="https://github.com/geo-tp/SectorRec/issues">Report an issue</a><a href="#top">Back to top ↑</a></p>
+    </footer>
+  </div>
+  <p class="colophon">Built around <a href="https://www.sleuthkit.org/">The Sleuth Kit</a>, <a href="https://www.cgsecurity.org/">TestDisk &amp; PhotoRec</a> and <a href="https://www.gnu.org/software/ddrescue/">GNU ddrescue</a>.</p>
+</body>
+</html>

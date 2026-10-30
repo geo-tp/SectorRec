@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 238" width="340" height="238">
+  <title>Signature recovery recognizes the contents of a file</title>
+  <desc>Without a usable file record, a scanner recognizes a JPEG header among disk blocks and attempts to extract the file under a generated name.</desc>
+  <rect x=".5" y=".5" width="339" height="237" fill="#fff" stroke="#ccd5dd"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#263d50">
+    <text x="18" y="28" font-size="15" font-weight="700">2. Recognize the file contents</text>
+    <rect x="18" y="43" width="304" height="43" fill="#eff6f2" stroke="#aec8b8"/>
+    <text x="31" y="69" font-size="14">No usable name or block list</text>
+    <path d="M34 102h180m-6-5 6 5-6 5" fill="none" stroke="#527c65" stroke-width="2"/>
+    <text x="241" y="106" fill="#527c65" font-size="11">scan →</text>
+    <g stroke="#87a28e">
+      <rect x="18" y="119" width="36" height="34" fill="#edf1f4"/>
+      <rect x="62" y="119" width="36" height="34" fill="#edf1f4"/>
+      <rect x="106" y="119" width="36" height="34" fill="#cee7d7"/>
+      <rect x="150" y="119" width="36" height="34" fill="#cee7d7"/>
+      <rect x="194" y="119" width="36" height="34" fill="#cee7d7"/>
+      <rect x="238" y="119" width="36" height="34" fill="#edf1f4"/>
+      <rect x="282" y="119" width="36" height="34" fill="#edf1f4"/>
+    </g>
+    <g font-size="13" text-anchor="middle"><text x="36" y="141">…</text><text x="80" y="141">…</text><text x="124" y="141" font-size="11" font-weight="700">JPG</text><text x="168" y="141">· · ·</text><text x="212" y="141">· · ·</text><text x="256" y="141">…</text><text x="300" y="141">…</text></g>
+    <path d="M170 157v23m-5-6 5 6 5-6" fill="none" stroke="#527c65" stroke-width="2"/>
+    <text x="170" y="202" font-family="Courier New, monospace" font-size="15" text-anchor="middle">f0000123.jpg</text>
+    <text x="170" y="222" fill="#5a6773" font-size="12" text-anchor="middle">A new name is usually assigned.</text>
+  </g>
+</svg>
