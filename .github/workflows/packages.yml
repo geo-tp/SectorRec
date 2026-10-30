@@ -1,0 +1,241 @@
+name: Build and publish SectorRec
+
+# Builds run on pull requests, tags, or manually. Only tag pushes publish Releases.
+permissions:
+  contents: read
+
+concurrency:
+  group: sectorrec-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+  pull_request:
+jobs:
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: amd64
+            appimage: x86_64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+            appimage: aarch64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip python3-venv python3-tk python3-pil \
+            sleuthkit testdisk gddrescue smartmontools util-linux sudo udisks2 fonts-dejavu-core curl \
+            xvfb xauth debhelper dh-python pybuild-plugin-pyproject dpkg-dev fakeroot \
+            build-essential python3-all python3-setuptools python3-wheel \
+            python3-pytest python3-pytest-timeout
+          python3 -m venv --system-site-packages /tmp/sectorrec-venv
+          /tmp/sectorrec-venv/bin/pip install pyinstaller '.[test]'
+      - name: Verify release tag matches application version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          actual="$(python3 -c 'from src import __version__; print(__version__)')"
+          if [ "$RELEASE_TAG" != "v${actual}" ]; then
+            echo "::error::Tag $RELEASE_TAG does not match src.__version__ ($actual)."
+            exit 1
+          fi
+      - name: Test
+        run: xvfb-run -a /tmp/sectorrec-venv/bin/python -m pytest -q
+      - name: Debian packages (desktop on both architectures, Cardputer on ARM64)
+        shell: bash
+        run: |
+          ./build-deb.sh "${{ matrix.arch }}" all
+          # Build the canonical source archive once (AMD64), not twice with
+          # potentially different checkout mtimes across ARM64 runners.
+          if [ "${{ matrix.arch }}" = arm64 ]; then
+            rm -f dist/*.dsc dist/*.orig.tar.gz dist/*.debian.tar.*
+          fi
+          pkg_version="$(dpkg-parsechangelog -SVersion)"
+          app_version="$(python3 -c 'from src import __version__; print(__version__)')"
+          desktop_deb="dist/SectorRec-${app_version}-Linux-${{ matrix.arch }}.deb"
+          test "$(dpkg-deb -f "$desktop_deb" Version)" = "$pkg_version"
+          dpkg-deb -f "$desktop_deb" Package | grep -Fx sectorrec
+          if [ "${{ matrix.arch }}" = arm64 ]; then
+            cardputer_deb="dist/SectorRec-${app_version}-Cardputer-Zero-arm64.deb"
+            test "$(dpkg-deb -f "$cardputer_deb" Version)" = "$pkg_version"
+            dpkg-deb -f "$cardputer_deb" Package | grep -Fx sectorrec-cardputer
+            # Cardputer uses the same narrowly scoped Polkit approach.
+            dpkg-deb -c "$cardputer_deb" | grep -F 'polkit-1/actions/io.github.geo_tp.sectorrec-cardputer.policy' >/dev/null
+          fi
+          for deb in dist/*.deb; do
+            if dpkg-deb -c "$deb" | grep -F 'etc/sudoers.d/' >/dev/null; then
+              echo "::error::Debian package must not install sudoers rules: $deb"
+              exit 1
+            fi
+          done
+          dpkg-deb -c "$desktop_deb" | grep -F 'polkit-1/actions/io.github.geo_tp.sectorrec.policy' >/dev/null
+          dpkg-deb -c "$desktop_deb" | grep -F 'usr/lib/sectorrec/sectorrec-session-server' >/dev/null
+      - name: AppImage tool
+        run: |
+          curl -fL --retry 3 -o /tmp/appimagetool.AppImage \
+            "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${{ matrix.appimage }}.AppImage"
+          chmod +x /tmp/appimagetool.AppImage
+          # appimagetool itself can run without FUSE after extraction.
+          cd /tmp && ./appimagetool.AppImage --appimage-extract
+      - name: Self-contained AppImage (full recovery with interactive sudo/Polkit for physical drives)
+        run: |
+          export PATH="/tmp/sectorrec-venv/bin:$PATH"
+          APPIMAGETOOL_BIN=/tmp/squashfs-root/AppRun ./build-appimage.sh
+          version="$(python3 -c 'from src import __version__; print(__version__)')"
+          "./dist/SectorRec_${version}_${{ matrix.appimage }}.AppImage" --appimage-extract
+          test -s ./squashfs-root/usr/libexec/sectorrec-root.pyz
+          for tool in fls icat photorec testdisk ddrescue smartctl sectorrec-askpass; do
+            test -x "./squashfs-root/usr/bin/$tool"
+          done
+          /usr/bin/python3 -I ./squashfs-root/usr/libexec/sectorrec-root.pyz reader scan /not-a-disk > /tmp/root-helper-test.log 2>&1 && exit 1
+          grep -q 'Invalid device path' /tmp/root-helper-test.log
+          ./squashfs-root/AppRun --list-devices >/tmp/appimage-devices.json
+          ./squashfs-root/AppRun --screenshot results --output /tmp/appimage-smoketest.png
+          test -s /tmp/appimage-smoketest.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SectorRec-linux-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist/*.deb
+            dist/*.AppImage
+            dist/*.dsc
+            dist/*.orig.tar.gz
+            dist/*.debian.tar.*
+
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verified native Windows build and smoke test
+        shell: pwsh
+        run: ./build-windows.ps1 -PythonExe python
+      - name: Package Windows installer (Inno Setup 6)
+        shell: pwsh
+        run: ./build-windows-installer.ps1
+      - name: Verify Windows release assets and corresponding Cygwin sources
+        shell: pwsh
+        run: |
+          $version = python -c 'from src import __version__; print(__version__)'
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot read version' }
+          $required = @(
+            'dist/SectorRec.exe',
+            "dist/SectorRec-$version-Windows-x64.zip",
+            "dist/SectorRec-$version-Windows-x64-Setup.exe",
+            'dist/SectorRec-Cygwin-GPL-sources.zip',
+            'dist/SectorRec-Windows-thirdparty-sources.zip',
+            'dist/THIRD_PARTY_NOTICES.txt'
+          )
+          foreach ($path in $required) {
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or (Get-Item $path).Length -eq 0) {
+              throw "Missing or empty Windows release asset: $path"
+            }
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SectorRec-Windows-x64
+          path: |
+            dist/SectorRec.exe
+            dist/SectorRec-*-Windows-x64.zip
+            dist/SectorRec-*-Windows-x64-Setup.exe
+            dist/SectorRec-Cygwin-GPL-sources.zip
+            dist/SectorRec-Windows-thirdparty-sources.zip
+            dist/THIRD_PARTY_NOTICES.txt
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-24.04
+    needs: [linux, windows]
+    # Publish only a complete Linux + Windows release, never silently omit an edition.
+    if: ${{ startsWith(github.ref, 'refs/tags/v') && needs.linux.result == 'success' && needs.windows.result == 'success' }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all successful build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: SectorRec-*
+          path: release-assets
+          merge-multiple: true
+
+      - name: Verify required Linux packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(dpkg-parsechangelog -SVersion)"
+          version_app="$(python3 -c 'from src import __version__; print(__version__)')"
+          for entry in \
+            "SectorRec-${version_app}-Linux-amd64.deb:sectorrec:amd64" \
+            "SectorRec-${version_app}-Linux-arm64.deb:sectorrec:arm64" \
+            "SectorRec-${version_app}-Cardputer-Zero-arm64.deb:sectorrec-cardputer:arm64"; do
+            IFS=: read -r pkg package arch <<< "$entry"
+            deb="release-assets/$pkg"
+            test -s "$deb" || { echo "::error::Missing required package $pkg"; exit 1; }
+            test "$(dpkg-deb -f "$deb" Package)" = "$package"
+            test "$(dpkg-deb -f "$deb" Architecture)" = "$arch"
+            test "$(dpkg-deb -f "$deb" Version)" = "$version"
+          done
+          for image_arch in x86_64 aarch64; do
+            test -s "release-assets/SectorRec_${version_app}_${image_arch}.AppImage" || {
+              echo "::error::Missing AppImage for ${image_arch}"; exit 1;
+            }
+          done
+          if [[ "${{ needs.windows.result }}" == success ]]; then
+            for asset in "SectorRec.exe" "SectorRec-${version_app}-Windows-x64.zip" "SectorRec-${version_app}-Windows-x64-Setup.exe" "SectorRec-Cygwin-GPL-sources.zip" "SectorRec-Windows-thirdparty-sources.zip" "THIRD_PARTY_NOTICES.txt"; do
+              test -s "release-assets/$asset" || { echo "::error::Missing Windows asset $asset"; exit 1; }
+            done
+          fi
+          echo 'Release files:' 
+          ls -lh release-assets/
+          test -s "release-assets/sectorrec_${version%-*}.orig.tar.gz"
+          test -s "release-assets/sectorrec_${version}.dsc"
+          test -s "release-assets/sectorrec_${version}.debian.tar.xz"
+          (cd release-assets && sha256sum ./* > SHA256SUMS.txt)
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          WINDOWS_RESULT: ${{ needs.windows.result }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          notes="RELEASE_NOTES_${version}.md"
+          if [[ -f "$notes" ]]; then
+            note_args=(--notes-file "$notes")
+          else
+            note_args=(--generate-notes)
+          fi
+          # Mark pre-release tags (e.g. v1.1-beta1) as prereleases.
+          release_args=()
+          [[ "$version" != *-* ]] || release_args+=(--prerelease)
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" release-assets/* --clobber
+          else
+            gh release create "$RELEASE_TAG" release-assets/* \
+              --verify-tag \
+              --title "SectorRec ${version}" \
+              "${note_args[@]}" "${release_args[@]}"
+          fi
+          {
+            echo "### SectorRec ${version} published"
+            echo "[Open release](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${RELEASE_TAG})"
+            echo "Windows build: ${WINDOWS_RESULT}"
+          } >> "$GITHUB_STEP_SUMMARY"
