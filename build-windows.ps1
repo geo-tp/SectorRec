@@ -91,11 +91,17 @@ if (-not $bundledRuntimeReady) {
             $mirror = $env:SECTORREC_CYGWIN_MIRROR
         }
         Write-Host 'Installing official Cygwin ddrescue into isolated build directory...'
-        & $setup --quiet-mode --no-admin --no-shortcuts --no-desktop --no-startmenu `
-            --only-site --site $mirror --root $cygRoot --local-package-dir $cygCache `
-            --include-source --packages ddrescue,cygwin,libgcc1,libstdc++6
-        if ($LASTEXITCODE -ne 0) {
-            throw "Cygwin setup exited with code $LASTEXITCODE"
+        # setup-x86_64.exe uses the Windows GUI subsystem. Under pwsh, invoking
+        # it with '&' can return before completion without setting LASTEXITCODE.
+        # Start-Process -Wait reliably waits for setup and child processes.
+        $setupArgs = '--quiet-mode --no-admin --no-shortcuts --no-desktop --no-startmenu ' +
+            '--only-site --site "' + $mirror + '" --root "' + $cygRoot +
+            '" --local-package-dir "' + $cygCache +
+            '" --include-source --packages ddrescue,cygwin,libgcc1,libstdc++6'
+        $setupProcess = Start-Process -FilePath $setup -ArgumentList $setupArgs `
+            -WorkingDirectory $root -Wait -PassThru
+        if ($null -eq $setupProcess.ExitCode -or $setupProcess.ExitCode -ne 0) {
+            throw "Cygwin setup exited with code $($setupProcess.ExitCode)"
         }
     } else {
         Write-Host 'Reusing existing Cygwin installation; skipping setup...'

@@ -18,9 +18,10 @@ class LCDIdlePolicy(unittest.TestCase):
             dim=IdleDimmer(backlight_dir=Path(d))
             t=dim.last_input
             self.assertFalse(dim.update(t+59))
-            self.assertTrue(dim.update(t+60))
+            # Floating-point monotonic timestamps may round t+60 just below 60.
+            self.assertTrue(dim.update(t+60.01))
             self.assertEqual((node/'brightness').read_text(),'15')
-            self.assertTrue(dim.update(t+120))
+            self.assertTrue(dim.update(t+120.01))
             self.assertTrue(dim.off)
             self.assertTrue(dim.physical_off)
             self.assertEqual((node/'brightness').read_text(),'0')
