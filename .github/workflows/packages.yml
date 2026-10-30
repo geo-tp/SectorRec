@@ -92,7 +92,7 @@ jobs:
           export PATH="/tmp/sectorrec-venv/bin:$PATH"
           APPIMAGETOOL_BIN=/tmp/squashfs-root/AppRun ./build-appimage.sh
           version="$(python3 -c 'from src import __version__; print(__version__)')"
-          "./dist/SectorRec_${version}_${{ matrix.appimage }}.AppImage" --appimage-extract
+          "./dist/SectorRec-${version}-Linux-${{ matrix.arch }}.AppImage" --appimage-extract
           test -s ./squashfs-root/usr/libexec/sectorrec-root.pyz
           for tool in fls icat photorec testdisk ddrescue smartctl sectorrec-askpass; do
             test -x "./squashfs-root/usr/bin/$tool"
@@ -133,7 +133,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Cannot read version' }
           $required = @(
             'dist/SectorRec.exe',
-            "dist/SectorRec-$version-Windows-x64.zip",
+            "dist/SectorRec-$version-Windows-x64-Portable.zip",
             "dist/SectorRec-$version-Windows-x64-Setup.exe",
             'dist/SectorRec-Cygwin-GPL-sources.zip',
             'dist/SectorRec-Windows-thirdparty-sources.zip',
@@ -149,7 +149,7 @@ jobs:
           name: SectorRec-Windows-x64
           path: |
             dist/SectorRec.exe
-            dist/SectorRec-*-Windows-x64.zip
+            dist/SectorRec-*-Windows-x64-Portable.zip
             dist/SectorRec-*-Windows-x64-Setup.exe
             dist/SectorRec-Cygwin-GPL-sources.zip
             dist/SectorRec-Windows-thirdparty-sources.zip
@@ -191,13 +191,13 @@ jobs:
             test "$(dpkg-deb -f "$deb" Architecture)" = "$arch"
             test "$(dpkg-deb -f "$deb" Version)" = "$version"
           done
-          for image_arch in x86_64 aarch64; do
-            test -s "release-assets/SectorRec_${version_app}_${image_arch}.AppImage" || {
+          for image_arch in amd64 arm64; do
+            test -s "release-assets/SectorRec-${version_app}-Linux-${image_arch}.AppImage" || {
               echo "::error::Missing AppImage for ${image_arch}"; exit 1;
             }
           done
           if [[ "${{ needs.windows.result }}" == success ]]; then
-            for asset in "SectorRec.exe" "SectorRec-${version_app}-Windows-x64.zip" "SectorRec-${version_app}-Windows-x64-Setup.exe" "SectorRec-Cygwin-GPL-sources.zip" "SectorRec-Windows-thirdparty-sources.zip" "THIRD_PARTY_NOTICES.txt"; do
+            for asset in "SectorRec.exe" "SectorRec-${version_app}-Windows-x64-Portable.zip" "SectorRec-${version_app}-Windows-x64-Setup.exe" "SectorRec-Cygwin-GPL-sources.zip" "SectorRec-Windows-thirdparty-sources.zip" "THIRD_PARTY_NOTICES.txt"; do
               test -s "release-assets/$asset" || { echo "::error::Missing Windows asset $asset"; exit 1; }
             done
           fi
