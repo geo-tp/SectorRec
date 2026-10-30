@@ -28,8 +28,9 @@ metadata and structured data. Navigation and assets use relative paths.
 
 ## Update a release
 
-Download links use GitHub's `releases/latest/download/` URLs with versioned asset
-filenames. For each release:
+Download buttons point to GitHub's tag-specific `releases/download/v1.0/` assets,
+so a future release does not invalidate the files displayed as version 1.0.
+The 'All release files' link uses `releases/latest`. For each release:
 
 - Match filenames to the packaging scripts and confirm the published assets exist.
 - Update the visible version, JSON-LD `softwareVersion`, download links and
