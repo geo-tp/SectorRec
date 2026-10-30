@@ -1,0 +1,37 @@
+sectorrec (1.0-9) unstable; urgency=medium
+
+  * Use one Polkit-authenticated root broker per desktop application session.
+  * Keep Cardputer passwordless helper policy and AppImage sudo unchanged.
+  * Remove the former persistent per-user Polkit grants.
+  * Fix release build inputs, platform-specific checks and source archives.
+
+ -- SectorRec contributors <noreply@example.invalid>  Thu, 29 Oct 2026 22:29:29 +0100
+
+sectorrec (1.0-8) unstable; urgency=medium
+
+  * Avoid unexpected Polkit prompts for background SMART diagnostics.
+  * Keep the GUI session when launching isolated privileged workers.
+  * Allow enough time for interactive authorization during source reservation.
+  * Prefer existing user device permissions before checking Polkit availability.
+
+ -- SectorRec contributors <noreply@example.invalid>  Thu, 29 Oct 2026 20:40:00 +0100
+
+sectorrec (1.0-7) unstable; urgency=medium
+
+  * Use native unprivileged device reads when already permitted.
+  * Desktop: authorize once with Polkit on first privileged access and
+    install exact-per-user helper permissions without logout or groups.
+  * Cardputer: passwordless Polkit actions limited to validated helpers.
+  * Keep AppImage interactive elevation unchanged.
+
+ -- SectorRec contributors <noreply@example.invalid>  Thu, 29 Oct 2026 20:45:00 +0100
+
+sectorrec (1.0-6) unstable; urgency=medium
+
+  * Unified standard Debian source package: desktop amd64/arm64 and Cardputer arm64.
+  * Use distribution recovery engines and Polkit on desktop.
+  * Define per-helper Polkit actions for desktop and Cardputer.
+  * Offer explicit administrator enrollment for passwordless access.
+  * Do not install blanket sudoers or automatic privileged grants.
+
+ -- SectorRec contributors <noreply@example.invalid>  Thu, 29 Oct 2026 18:00:00 +0100

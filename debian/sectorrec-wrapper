@@ -1,0 +1,4 @@
+#!/bin/sh
+# Debian archive edition: use Polkit, never inherited unsafe PYTHONPATH.
+export SECTORREC_DEBIAN_ARCHIVE=1
+exec /usr/bin/python3 -m src.app --ui desktop "$@"

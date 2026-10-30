@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+# Upgrade cleanup: remove ONLY SectorRec-generated grants from the former
+# 1.0-7/1.0-8 bootstrap. Never delete arbitrary administrator Polkit policy.
+if [ "$1" = configure ]; then
+    for rule in /etc/polkit-1/rules.d/50-sectorrec-user-[0-9]*.rules; do
+        [ -f "$rule" ] || continue
+        if grep -Fqx '// Authorized by an administrator through SectorRec'"'"'s Polkit bootstrap.' "$rule" && \
+           grep -Fq "action.lookup('program') === allowed[action.id]" "$rule"; then
+            rm -f -- "$rule"
+        fi
+    done
+fi
+#DEBHELPER#

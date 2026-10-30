@@ -1,0 +1,29 @@
+Source: sectorrec
+Section: utils
+Priority: optional
+Maintainer: SectorRec contributors <noreply@example.invalid>
+Build-Depends: debhelper-compat (= 13), dh-sequence-python3, pybuild-plugin-pyproject, python3-all, python3-setuptools, python3-wheel, python3-pytest <!nocheck>, python3-pytest-timeout <!nocheck>, python3-pil, python3-tk, xvfb <!nocheck>, xauth <!nocheck>
+Standards-Version: 4.7.4
+Rules-Requires-Root: no
+Homepage: https://github.com/geo-tp/SectorRec
+Vcs-Git: https://github.com/geo-tp/SectorRec.git
+Vcs-Browser: https://github.com/geo-tp/SectorRec
+
+Package: sectorrec
+Architecture: amd64 arm64
+Conflicts: sectorrec-cardputer
+Depends: ${misc:Depends}, ${python3:Depends}, python3 (>= 3.10), python3-pil, python3-tk, sleuthkit, testdisk, gddrescue, smartmontools, udisks2, pkexec, fonts-dejavu-core
+Description: guided desktop file recovery and disk imaging interface
+ SectorRec provides a desktop interface to Sleuth Kit, TestDisk, PhotoRec
+ and GNU ddrescue. It supports disk images and physical storage devices.
+ The recovery engines are installed as distribution packages, and Polkit
+ authorizes a session-scoped privileged helper only when required.
+
+Package: sectorrec-cardputer
+Architecture: arm64
+Conflicts: sectorrec
+Depends: ${misc:Depends}, ${python3:Depends}, ${shlibs:Depends}, python3 (>= 3.10), python3-pil, sleuthkit, testdisk, smartmontools, udisks2, pkexec, fonts-dejavu-core
+Description: guided file recovery for the Cardputer Zero
+ Lightweight framebuffer edition of SectorRec for the Cardputer Zero.
+ Uses the system's Sleuth Kit and TestDisk utilities with strictly scoped
+ root-owned helper programs via Polkit, without a root interface.

@@ -1,0 +1,72 @@
+#!/usr/bin/make -f
+export PYBUILD_NAME=sectorrec
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+
+%:
+	dh $@ --buildsystem=pybuild
+
+# Build Python once with pybuild, then install it into both mutually-exclusive
+# Debian packages.  The Cardputer includes an ARM64 native framebuffer helper.
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp
+	# Pybuild's PEP 517 staging layout can differ between Python/Debian
+	# versions (python3/dist-packages vs python3.X/site-packages).
+	# Locate the built application, not a hard-coded interpreter directory.
+	set -eu; \
+	stage_init=''; \
+	if [ -d debian/tmp ]; then \
+	  stage_init="$$(find debian/tmp -type f -path '*/src/__init__.py' -print -quit)"; \
+	fi; \
+	if [ -z "$$stage_init" ] && [ -d debian/python3-sectorrec ]; then \
+	  stage_init="$$(find debian/python3-sectorrec -type f -path '*/src/__init__.py' -print -quit)"; \
+	fi; \
+	if [ -z "$$stage_init" ]; then \
+	  echo 'ERROR: pybuild did not stage the SectorRec Python package.' >&2; \
+	  echo 'Inspecting pybuild output:' >&2; \
+	  find debian/tmp debian/python3-sectorrec -maxdepth 7 -print 2>/dev/null >&2 || :; \
+	  exit 1; \
+	fi; \
+	stage_root="$${stage_init%/src/__init__.py}"; \
+	test -f "$$stage_root/src/app.py" || { echo 'ERROR: incomplete SectorRec Python installation' >&2; exit 1; }; \
+	set -- "$$stage_root"/sectorrec-*.dist-info; \
+	test -d "$$1" || { echo 'ERROR: SectorRec wheel metadata (.dist-info) is missing' >&2; exit 1; }; \
+	echo "SectorRec staged Python modules in $$stage_root"; \
+	for pkg in sectorrec $(if $(filter arm64,$(DEB_HOST_ARCH)),sectorrec-cardputer,); do \
+	  root="debian/$$pkg"; \
+	  target="$$root/usr/lib/python3/dist-packages"; \
+	  mkdir -p "$$target"; \
+	  cp -a "$$stage_root/src" "$$target/"; \
+	  for metadata in "$$stage_root"/sectorrec-*.dist-info; do \
+	    cp -a "$$metadata" "$$target/"; \
+	  done; \
+	  install -D -m 0755 src/helpers/reader.py "$$root/usr/lib/sectorrec/sectorrec-reader"; \
+	done
+	set -eu; \
+	root=debian/sectorrec; \
+	install -D -m 0755 debian/sectorrec-wrapper "$$root/usr/bin/sectorrec"; \
+	install -D -m 0755 src/helpers/session_server.py "$$root/usr/lib/sectorrec/sectorrec-session-server"; \
+	install -D -m 0755 src/helpers/photo_reader.py "$$root/usr/lib/sectorrec/sectorrec-photo-reader"; \
+	install -D -m 0755 src/helpers/image_reader.py "$$root/usr/lib/sectorrec/sectorrec-image-reader"; \
+	install -D -m 0644 debian/sectorrec.desktop "$$root/usr/share/applications/sectorrec.desktop"; \
+	install -D -m 0644 debian/io.github.geo_tp.SectorRec.metainfo.xml "$$root/usr/share/metainfo/io.github.geo_tp.SectorRec.metainfo.xml"; \
+	install -D -m 0644 src/assets/sectorrec_desktop_icon.png "$$root/usr/share/icons/hicolor/256x256/apps/sectorrec.png"; \
+	install -D -m 0644 debian/sectorrec-desktop.policy "$$root/usr/share/polkit-1/actions/io.github.geo_tp.sectorrec.policy"
+	if [ "$(DEB_HOST_ARCH)" = arm64 ]; then \
+	  root=debian/sectorrec-cardputer; \
+	  install -D -m 0755 debian/cardputer-wrapper "$$root/usr/bin/sectorrec"; \
+	  install -D -m 0755 src/helpers/backlight_helper.py "$$root/usr/lib/sectorrec/sectorrec-backlight"; \
+	  install -D -m 0644 debian/sectorrec.desktop "$$root/usr/share/applications/sectorrec.desktop"; \
+	  install -D -m 0644 src/assets/sectorrec_applaunch.png "$$root/usr/share/APPLaunch/share/images/sectorrec.png"; \
+	  install -D -m 0644 src/assets/sectorrec_small.png "$$root/usr/share/APPLaunch/share/images/sectorrec_small.png"; \
+	  install -D -m 0644 debian/sectorrec-cardputer.desktop "$$root/usr/share/APPLaunch/applications/sectorrec.desktop"; \
+	  install -D -m 0644 src/assets/sectorrec_desktop_icon.png "$$root/usr/share/icons/hicolor/256x256/apps/sectorrec.png"; \
+	  install -D -m 0644 debian/sectorrec-cardputer.policy "$$root/usr/share/polkit-1/actions/io.github.geo_tp.sectorrec-cardputer.policy"; \
+	  $(CC) -O2 -fPIC -shared -Wl,-soname,libsectorrec565.so -o "$$root/usr/lib/sectorrec/libsectorrec565.so" src/views/cardputer/pixel565.c; \
+	fi
+	# Package staging was copied explicitly; don't leave unassigned files.
+	rm -rf debian/tmp
+
+override_dh_auto_test:
+	if ! echo '$(DEB_BUILD_OPTIONS)' | grep -qw nocheck; then \
+	  xvfb-run -a /usr/bin/python3 -m pytest -q; \
+	fi

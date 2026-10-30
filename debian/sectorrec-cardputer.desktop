@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=SectorRec
+Comment=Recover deleted files on Cardputer Zero
+Exec=/usr/bin/sectorrec
+Icon=/usr/share/APPLaunch/share/images/sectorrec.png
+Path=/usr/share/APPLaunch
+Terminal=false
+Categories=Utility;System;

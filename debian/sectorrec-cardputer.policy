@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN" "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>SectorRec</vendor>
+  <vendor_url>https://github.com/geo-tp/SectorRec</vendor_url>
+  <action id="io.github.geo_tp.sectorrec.reader">
+    <description>Read and inspect a storage device with SectorRec</description>
+    <message>Authorization is required for SectorRec to access a physical disk</message>
+    <defaults><allow_any>yes</allow_any><allow_inactive>yes</allow_inactive><allow_active>yes</allow_active></defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/sectorrec/sectorrec-reader</annotate>
+  </action>
+  <action id="io.github.geo_tp.sectorrec.backlight">
+    <description>Adjust the Cardputer Zero backlight for SectorRec</description>
+    <message>Authorization is required to control the Cardputer backlight</message>
+    <defaults><allow_any>yes</allow_any><allow_inactive>yes</allow_inactive><allow_active>yes</allow_active></defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/sectorrec/sectorrec-backlight</annotate>
+  </action>
+</policyconfig>

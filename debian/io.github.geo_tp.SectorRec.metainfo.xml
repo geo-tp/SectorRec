@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.geo_tp.SectorRec</id>
+  <name>SectorRec</name>
+  <summary>Recover deleted files and create disk images</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>SectorRec guides users through file recovery with Sleuth Kit, PhotoRec,
+    TestDisk and GNU ddrescue, using tools installed by the distribution.</p>
+    <p>Physical disk access requires an explicit administrator authorization.
+    Recovered data should always be saved on a different physical drive.</p>
+  </description>
+  <launchable type="desktop-id">sectorrec.desktop</launchable>
+  <url type="homepage">https://github.com/geo-tp/SectorRec</url>
+  <url type="bugtracker">https://github.com/geo-tp/SectorRec/issues</url>
+  <url type="help">https://geo-tp.github.io/SectorRec/</url>
+  <provides><binary>sectorrec</binary></provides>
+  <categories>
+    <category>System</category>
+    <category>Utility</category>
+  </categories>
+</component>

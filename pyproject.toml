@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sectorrec"
+dynamic = ["version"]
+description = "SectorRec cross-platform file recovery"
+readme = "README.md"
+# Keep compatibility with the distro setuptools used by Debian/Ubuntu pybuild.
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+dependencies = ["Pillow>=9.4"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: System :: Recovery Tools",
+]
+
+[project.scripts]
+sectorrec = "src.app:main"
+
+[project.optional-dependencies]
+test = ["pytest>=8", "pytest-timeout>=2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+timeout = 15
+
+[tool.setuptools.dynamic]
+version = {attr = "src.__version__"}
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src", "src.*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+src = ["assets/*.png"]

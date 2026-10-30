@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=SectorRec
+GenericName=File Recovery
+Comment=Recover files and create disk images
+Exec=sectorrec
+Icon=sectorrec
+Terminal=false
+Categories=System;Utility;
+Keywords=recovery;disk;file;partition;photo;imaging;

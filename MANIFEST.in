@@ -1,0 +1,13 @@
+include LICENSE
+include RELEASE_NOTES_*.md
+include launch_desktop.py appimage-root-main.py
+include build-desktop-bundle.py
+include build-*.sh build-*.ps1 run-tests.sh SectorRec.iss
+include src/views/cardputer/pixel565.c
+include .github/workflows/packages.yml .github/workflows/windows-preflight.yml
+include debian/control debian/changelog debian/copyright debian/docs debian/rules debian/watch
+include debian/*wrapper debian/*.desktop debian/*.policy debian/*.1
+include debian/*.postinst debian/*.maintscript debian/*.manpages debian/*.xml
+recursive-include debian/source *
+recursive-include tests *.py
+recursive-include docs *.md

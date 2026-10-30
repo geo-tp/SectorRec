@@ -1,0 +1,40 @@
+.TH SECTORREC 1 "October 2026" "SectorRec 1.0" "User Commands"
+.SH NAME
+sectorrec \- guided file recovery and disk imaging interface
+.SH SYNOPSIS
+.B sectorrec
+.RI [ options ]
+.SH DESCRIPTION
+SectorRec provides a graphical interface for recovering deleted files
+using The Sleuth Kit or PhotoRec, locating lost partitions via TestDisk,
+and creating disk images with GNU ddrescue.
+Both Debian package editions invoke system-installed recovery tools.
+Debian editions use Polkit for fixed-purpose privileged helpers.
+On desktop, Polkit asks for administrator approval once per app session on the first privileged
+operation; subsequent operations reuse that session until the application closes.
+.SH OPTIONS
+.TP
+.B --demo
+Display demo data without accessing physical media.
+.TP
+.B --list-devices
+List recognized devices in JSON format.
+.TP
+.B --ui desktop
+Use the desktop interface. The Cardputer package defaults to framebuffer.
+.TP
+.B --help
+Show the available command line options.
+.SH SECURITY
+Never save recovered files to the source disk. Physical disk authorization
+may require a single Polkit authentication per application session.
+The restricted root broker exits when SectorRec closes; no permanent
+user permissions are created.
+.SH SEE ALSO
+.BR fls (1),
+.BR icat (1),
+.BR testdisk (8),
+.BR photorec (8),
+.BR ddrescue (1)
+.SH AUTHOR
+SectorRec contributors

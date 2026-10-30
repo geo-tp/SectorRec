@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<policyconfig>
+  <vendor>SectorRec</vendor>
+  <vendor_url>https://github.com/geo-tp/SectorRec</vendor_url>
+  <action id="io.github.geo_tp.sectorrec.session">
+    <description>Authorize disk recovery operations for this SectorRec session</description>
+    <message>Allow SectorRec to access physical disks for the duration of this application session?</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/sectorrec/sectorrec-session-server</annotate>
+  </action>
+</policyconfig>
