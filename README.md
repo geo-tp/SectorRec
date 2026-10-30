@@ -7,7 +7,7 @@
 
 No technical expertise required: just select your device or disk image, choose a recovery method, and let SectorRec guide you through the process.
 
->A clicking drive, a device that repeatedly disconnects or important data on a rapidly failing disk may call for a recovery specialist before another power-on. **Software cannot repair damaged hardware**. [Click here for the SectorRec recovery guide.](https://geo-tp.github.io/SectorRec)
+>A clicking drive, a device that repeatedly disconnects or important data on a rapidly failing disk may call for a recovery specialist before another power-on. **Software cannot repair damaged hardware**. [Click here for the SectorRec recovery guide.](https://geo-tp.github.io/SectorRec/recovery-guide.html)
 
 
 ## Features
@@ -29,7 +29,7 @@ Current desktop interface, with a fictional **Photos** volume (48 GB) on a USB d
 
 ### Recovery Guide
 
-Not sure where to start? Check out the [Recovery Guide for practical advice, common recovery scenarios, and essential tips to avoid mistakes](docs/images/desktop-methods.png). Learn what to do, what to avoid, and how to improve your chances of recovering your files safely.
+Not sure where to start? Check out the [Recovery Guide for practical advice, common recovery scenarios, and essential tips to avoid mistakes](https://geo-tp.github.io/SectorRec/recovery-guide.html). Learn what to do, what to avoid, and how to improve your chances of recovering your files safely.
 
 
 ### Recovery Methods
