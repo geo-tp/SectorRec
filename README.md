@@ -7,7 +7,7 @@
 
 No technical expertise required: just select your device or disk image, choose a recovery method, and let SectorRec guide you through the process.
 
->A clicking drive, a device that repeatedly disconnects or important data on a rapidly failing disk may call for a recovery specialist before another power-on. **Software cannot repair damaged hardware**. [Click here for a recovery guide and for more informations](https://geo-tp.github.io/SectorRec)
+>A clicking drive, a device that repeatedly disconnects or important data on a rapidly failing disk may call for a recovery specialist before another power-on. **Software cannot repair damaged hardware**. [Click here for the SectorRec recovery guide.](https://geo-tp.github.io/SectorRec)
 
 
 ## Features
