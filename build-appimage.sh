@@ -24,6 +24,44 @@ APPDIR="$PWD/build/SectorRec.AppDir"
 rm -rf "$APPDIR"
 mkdir -p "$APPDIR/usr/opt" "$APPDIR/usr/bin" "$APPDIR/usr/lib" "$APPDIR/usr/libexec" "$APPDIR/usr/share/icons/hicolor/256x256/apps"
 cp -a dist/SectorRec "$APPDIR/usr/opt/SectorRec"
+# Tcl/Tk loads BLT dynamically: PyInstaller's dependency scan can miss it.
+# Package it inside the *frozen Python runtime* (_internal), not just alongside
+# the unrelated recovery-tool binaries. This makes the GUI portable to Linux
+# systems where tk8.6-blt2.5 was never installed.
+PYI_LIBDIR="$APPDIR/usr/opt/SectorRec/_internal"
+if [[ ! -d "$PYI_LIBDIR" ]]; then
+  echo "PyInstaller _internal directory missing: $PYI_LIBDIR" >&2
+  exit 1
+fi
+BLT_SOURCES=()
+for pattern in 'libBLT.2.5.so.*' 'libBLTlite.2.5.so.*'; do
+  found=0
+  for directory in /usr/lib /usr/lib/*-linux-gnu /lib /lib/*-linux-gnu; do
+    for library in "$directory"/$pattern; do
+      [[ -f "$library" ]] || continue
+      name="$(basename "$library")"
+      # Keep an additional copy in the AppImage recovery-engine library path;
+      # the frozen GUI itself uses the copy in PyInstaller's _internal.
+      if [[ ! -f "$PYI_LIBDIR/$name" ]]; then
+        cp -L -- "$library" "$PYI_LIBDIR/$name"
+      fi
+      if [[ ! -f "$APPDIR/usr/lib/$name" ]]; then
+        cp -L -- "$library" "$APPDIR/usr/lib/$name"
+      fi
+      BLT_SOURCES+=("$library")
+      found=1
+    done
+  done
+  if (( ! found )); then
+    echo "Missing $pattern: install the tk8.6-blt2.5 package on the build host" >&2
+    exit 1
+  fi
+done
+# _tkinter is a dynamically loaded PyInstaller extension, never a pure .py.
+if ! find "$PYI_LIBDIR" -type f -name '_tkinter*.so' | grep -q .; then
+  echo "Missing frozen _tkinter.so in $PYI_LIBDIR" >&2
+  exit 1
+fi
 install -m 0755 "$(command -v fls)" "$APPDIR/usr/bin/fls"
 install -m 0755 "$(command -v icat)" "$APPDIR/usr/bin/icat"
 install -m 0755 "$(command -v photorec)" "$APPDIR/usr/bin/photorec"
@@ -167,6 +205,22 @@ for prog in "$(command -v fls)" "$(command -v icat)" "$(command -v photorec)" "$
     dpkg-query -W -f='${binary:Package} ${Version} source=${source:Package} (${source:Version})\n' "$pkg" >> "$manifest"
   done < <(ldd "$prog" | awk '/=> \/|^\s*\// { for (i=1;i<=NF;i++) if ($i ~ /^\//) {print $i;break} }')
 done
+# BLT is an additional bundled dependency of the frozen Tkinter runtime.
+# Record the matching Debian package, license and source version too.
+for library in "${BLT_SOURCES[@]}"; do
+  pkg="$(find_library_deb_owner "$library" || true)"
+  if [[ -z "$pkg" ]]; then
+    echo "Cannot map bundled Tk library $library to a Debian package" >&2
+    exit 1
+  fi
+  copyright="/usr/share/doc/${pkg%%:*}/copyright"
+  if [[ ! -s "$copyright" ]]; then
+    echo "No license notice for bundled Tk library $library (package $pkg)" >&2
+    exit 1
+  fi
+  install -D -m 0644 "$copyright" "$APPDIR/usr/share/doc/${pkg%%:*}/copyright"
+  dpkg-query -W -f='${binary:Package} ${Version} source=${source:Package} (${source:Version})\n' "$pkg" >> "$manifest"
+done
 sort -u "$manifest" -o "$manifest"
 install -m 0644 LICENSE "$APPDIR/usr/opt/SectorRec/LICENSE"
 # Optical/read-only content verification in CI must ensure helper and engines
@@ -177,4 +231,16 @@ done
 test -s "$APPDIR/usr/libexec/sectorrec-root.pyz"
 mkdir -p dist
 export ARCH
-"$APPIMAGETOOL_BIN" "$APPDIR" "dist/SectorRec_${VERSION}_${ARCH}.AppImage"
+image="$PWD/dist/SectorRec_${VERSION}_${ARCH}.AppImage"
+"$APPIMAGETOOL_BIN" "$APPDIR" "$image"
+# Test the EXACT packaged artifact: extract it to avoid FUSE, launch its frozen
+# Python under a virtual screen and force-load *bundled* BLT and BLTlite.
+# Failing this check prevents a broken AppImage from being released.
+if command -v xvfb-run >/dev/null 2>&1; then
+  smoke_dir="$(mktemp -d)"
+  (cd "$smoke_dir" && "$image" --appimage-extract >/dev/null)
+  xvfb-run -a "$smoke_dir/squashfs-root/AppRun" --check-tk-runtime
+  rm -rf "$smoke_dir"
+else
+  echo "WARNING: xvfb-run missing; cannot verify the frozen GUI on this host" >&2
+fi

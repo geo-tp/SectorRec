@@ -120,6 +120,23 @@ def askpass():
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] == '--check-tk-runtime':
+        # Packaging smoke test: prove the frozen program can load its own BLT
+        # copies (not the build host's), then initialize a real Tcl/Tk window.
+        if getattr(sys, 'frozen', False) and __import__('os').environ.get('SECTORREC_APPIMAGE') == '1':
+            import ctypes
+            from pathlib import Path
+            internal = Path(sys.executable).parent / '_internal'
+            for prefix in ('libBLT.2.5.so.', 'libBLTlite.2.5.so.'):
+                matches = sorted(internal.glob(prefix + '*'))
+                if not matches:
+                    raise RuntimeError(f'AppImage is missing {prefix}* in {internal}')
+                ctypes.CDLL(str(matches[0]))
+        import tkinter as tk
+        root = tk.Tk()
+        root.withdraw()
+        root.destroy()
+        raise SystemExit(0)
     if len(sys.argv) > 1 and sys.argv[1] == '--sectorrec-askpass':
         raise SystemExit(askpass())
     from src.app import main
