@@ -55,7 +55,10 @@ for prog in "$(command -v fls)" "$(command -v icat)" "$(command -v photorec)" "$
     [[ -f "$lib" ]] || continue
     name=$(basename "$lib")
     case "$name" in libc.so.*|libm.so.*|libpthread.so.*|libdl.so.*|librt.so.*|ld-linux*.so.*|libresolv.so.*|libnss_*.so.*) continue;; esac
-    cp -nL "$lib" "$APPDIR/usr/lib/$name"
+    # Avoid the deprecated cp -n warning, while preserving first-copy-wins.
+    if [[ ! -e "$APPDIR/usr/lib/$name" ]]; then
+      cp -L "$lib" "$APPDIR/usr/lib/$name"
+    fi
   done < <(ldd "$prog" | awk '/=> \/|^\s*\// { for (i=1;i<=NF;i++) if ($i ~ /^\//) {print $i;break} }')
 done
 cat > "$APPDIR/AppRun" <<'EOF'
@@ -96,6 +99,45 @@ for pkg in sleuthkit testdisk gddrescue smartmontools; do
   fi
   install -D -m 0644 "$notice" "$APPDIR/usr/share/doc/$pkg/copyright"
 done
+# dpkg-query -S can report file diversions *before* the owning package,
+# especially on merged-/usr Ubuntu installations. Only accept actual package
+# ownership lines, and account for /lib -> /usr/lib canonical paths.
+find_library_deb_owner() {
+  local original="$1" resolved path candidate raw owner
+  local -a paths
+  resolved="$(readlink -f -- "$original" 2>/dev/null || true)"
+  paths=("$original")
+  [[ -z "$resolved" ]] || paths+=("$resolved")
+  for path in "$original" "$resolved"; do
+    case "$path" in
+      /lib/*|/lib64/*) paths+=("/usr$path") ;;
+      /usr/lib/*|/usr/lib64/*) paths+=("${path#/usr}") ;;
+    esac
+  done
+  for candidate in "${paths[@]}"; do
+    raw="$(LC_ALL=C dpkg-query -S -- "$candidate" 2>/dev/null || true)"
+    [[ -n "$raw" ]] || continue
+    owner="$(awk -v target="$candidate" '
+      {
+        sep = index($0, ": ")
+        if (!sep || substr($0, sep + 2) != target) next
+        owners = substr($0, 1, sep - 1)
+        n = split(owners, names, ", ")
+        for (i = 1; i <= n; i++) {
+          if (names[i] ~ /^[a-z0-9][a-z0-9+.-]*(:[a-z0-9]+)?$/) {
+            print names[i]
+            exit
+          }
+        }
+      }
+    ' <<< "$raw")"
+    if [[ -n "$owner" ]]; then
+      printf '%s\n' "$owner"
+      return 0
+    fi
+  done
+  return 1
+}
 # Track installed binary packages supplying bundled native libraries. These
 # exact package/source versions must be included in the corresponding-source
 # distribution alongside any public AppImage release.
@@ -110,11 +152,8 @@ for prog in "$(command -v fls)" "$(command -v icat)" "$(command -v photorec)" "$
     [[ -f "$library" ]] || continue
     name=$(basename "$library")
     case "$name" in libc.so.*|libm.so.*|libpthread.so.*|libdl.so.*|librt.so.*|ld-linux*.so.*|libresolv.so.*|libnss_*.so.*) continue;; esac
-    pkg=$(dpkg-query -S "$library" 2>/dev/null | head -n1 | sed 's/: \/.*//' || true)
-    if [[ -z "$pkg" ]]; then
-      pkg=$(dpkg-query -S "$(readlink -f "$library")" 2>/dev/null | head -n1 | sed 's/: \/.*//' || true)
-    fi
-    # dpkg-query -S may find multi-arch package qualifiers in the owner name.
+    pkg="$(find_library_deb_owner "$library" || true)"
+    # dpkg-query -S may include a multi-arch qualifier (e.g. :arm64).
     if [[ -z "$pkg" ]]; then
       echo "Cannot map bundled library $library to a Debian package" >&2
       exit 1
