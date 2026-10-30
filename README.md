@@ -1,7 +1,7 @@
 
 # SectorRec
 
-![SectorRec banner with supported devices](/docs/images/banner-devices_s.jpg)
+![SectorRec banner with supported devices](docs/images/banner-devices_s.jpg)
 
 **Recover deleted files. Find lost partitions. Make a safer copy of a failing disk.** SectorRec is an intuitive, step-by-step file recovery app. 
 
@@ -23,21 +23,14 @@ No technical expertise required: just select your device or disk image, choose a
 
 Current desktop interface, with a fictional **Photos** volume (48 GB) on a USB drive.
 
-![SectorRec recovery methods for the fictional Photos USB volume](docs/images/desktop-methods.png)
+![SectorRec recovery methods for the fictional Photos USB volume](docs/images/desktop-methods.jpg)
 
 ## Getting started
 
-### Disks and Volumes
+### Recovery Guide
 
-In this example, **Photo USB** is the whole disk; **Photos** and **Documents** are its partitions. **Backup SSD** is a separate device for recovered files. All devices shown are fictional.
+Not sure where to start? Check out the [Recovery Guide for practical advice, common recovery scenarios, and essential tips to avoid mistakes](docs/images/desktop-methods.png). Learn what to do, what to avoid, and how to improve your chances of recovering your files safely.
 
-[![SectorRec's current source list: a USB disk, its two partitions and a separate backup SSD](docs/images/disks_s.jpg)](docs/images/disks.png)
-
-### System Disks
-
-The **SYSTEM DISK** badge identifies the computer's system drive and its volumes. In this fictional example, recover from **Computer SSD** and save to the separate **Backup USB**, not another partition on the same SSD.
-
-[![SectorRec's current source list: a system SSD and its volumes, with a separate backup USB drive](docs/images/system-disks_s.jpg)](docs/images/system-disks.png)
 
 ### Recovery Methods
 
@@ -81,7 +74,7 @@ Device details shows available model, size and filesystem information, plus a SM
 
 Download the latest version of SectorRec from the [GitHub Releases page](https://github.com/geo-tp/SectorRec/releases/latest).
 
-[![](/docs/images/platform_s.jpg)](https://github.com/geo-tp/SectorRec/releases/latest)
+[![](docs/images/platform_s.jpg)](https://github.com/geo-tp/SectorRec/releases/latest)
 
 
 ---
