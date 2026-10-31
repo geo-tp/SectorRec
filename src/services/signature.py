@@ -574,9 +574,18 @@ def photorec_command(binary, source, output_prefix, format_preset='all', *, part
         if style not in ('partition_i386', 'partition_gpt') or not isinstance(number, int) or number < 1:
             raise ValueError('Unsupported PhotoRec partition selector')
         start = [style, str(number)]
-    options = start + ['fileopt', 'everything', 'enable' if not selected else 'disable']
-    for family in selected:
-        options.extend((family, 'enable'))
+    # PhotoRec's CLI "everything,enable" activates every signature, even
+    # those disabled by default (see upstream phcli.c), despite the ambiguous
+    # wording in its scripted-run documentation. In "all" mode, preserve the
+    # upstream default selection and explicitly disable Dovecot so persisted
+    # PhotoRec user settings cannot re-enable its weak zero-filled signature.
+    options = list(start)
+    if selected:
+        options.extend(('fileopt', 'everything', 'disable'))
+        for family in selected:
+            options.extend((family, 'enable'))
+    else:
+        options.extend(('fileopt', 'dovecot', 'disable'))
     options.extend(('wholespace', 'search'))
     return [binary, '/d', str(output_prefix), '/cmd', str(source), ','.join(options)]
 

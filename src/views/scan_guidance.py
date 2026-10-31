@@ -30,7 +30,7 @@ SCAN_TIPS = {
         "Output is saved continuously. Stopping early keeps already written files in the destination.",
         "Available destination space is monitored while PhotoRec writes its recovery folders.",
         "A successful signature match does not guarantee a complete or undamaged file.",
-        "Selecting fewer signature families can omit files; All formats is the safest default.",
+        "The default PhotoRec format selection avoids some high false-positive signatures.",
         "An ISO installer image can yield files from the installer itself rather than older USB data.",
         "Never use the scanned device as the destination: recovered files may overwrite source data.",
         "Recoverable data volume is unknown until extraction finishes; free-space checks are estimates.",

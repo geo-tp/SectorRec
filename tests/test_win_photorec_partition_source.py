@@ -32,7 +32,7 @@ class WindowsPhotoRecPartitionTests(unittest.TestCase):
         command = photorec_command('photorec.exe', src, '/out/recovery', partition=(style, number))
         self.assertEqual(command[-2], r'\\.\PhysicalDrive3')
         self.assertEqual(command[-1],
-                         'partition_i386,1,fileopt,everything,enable,wholespace,search')
+                         'partition_i386,1,fileopt,dovecot,disable,wholespace,search')
 
     def test_gpt_partitions_are_explicit(self):
         selected = {**self.selected, 'partition_number': 2, 'partition_style': 'GPT'}
@@ -60,7 +60,7 @@ class WindowsPhotoRecPartitionTests(unittest.TestCase):
             command = job._commands(Path('/safe/out/SectorRec_20261029'))
         resolver.assert_called_once()
         self.assertEqual(command[-2], r'\\.\PhysicalDrive3')
-        self.assertTrue(command[-1].startswith('partition_i386,1,'))
+        self.assertEqual(command[-1], 'partition_i386,1,fileopt,dovecot,disable,wholespace,search')
 
     def test_whole_disk_retains_original_command(self):
         job = PhotoRecWorker(r'\\.\PhysicalDrive3', '/safe/out', {},
@@ -71,7 +71,7 @@ class WindowsPhotoRecPartitionTests(unittest.TestCase):
             command = job._commands(Path('/safe/out/SectorRec_20261029'))
         resolver.assert_not_called()
         self.assertEqual(command[-2], r'\\.\PhysicalDrive3')
-        self.assertTrue(command[-1].startswith('partition_none,'))
+        self.assertEqual(command[-1], 'partition_none,fileopt,dovecot,disable,wholespace,search')
 
 if __name__ == '__main__':
     unittest.main()

@@ -18,7 +18,25 @@ class SignatureTests(unittest.TestCase):
     def test_command_is_supported_noninteractive_photorec(self):
         self.assertEqual(signature.photorec_command('photorec', '/tmp/test.img','/out/files'),
             ['photorec','/d','/out/files','/cmd','/tmp/test.img',
-             'partition_none,fileopt,everything,enable,wholespace,search'])
+             'partition_none,fileopt,dovecot,disable,wholespace,search'])
+        # Only Dovecot is excluded; PhotoRec's other default formats stay enabled.
+        options = signature.photorec_command(
+            'photorec', '/tmp/test.img', '/out/files', 'all')[-1]
+        self.assertEqual(options.count(',disable'), 1)
+        self.assertIn('fileopt,dovecot,disable', options)
+        self.assertNotIn('everything,enable', options)
+
+    def test_filtered_preset_still_only_enables_requested_families(self):
+        command = signature.photorec_command(
+            'photorec', '/tmp/test.img', '/out/files', 'photos')[-1]
+        self.assertIn('fileopt,everything,disable,jpg,enable,png,enable', command)
+        self.assertNotIn('dovecot,enable', command)
+
+    def test_default_partition_scan_keeps_photorec_default_formats(self):
+        command = signature.photorec_command(
+            'photorec', '/dev/sda', '/out/files', 'all',
+            partition=('partition_gpt', 2))[-1]
+        self.assertEqual(command, 'partition_gpt,2,fileopt,dovecot,disable,wholespace,search')
 
     def test_cardputer_cannot_offer_photorec(self):
         ctl = Controller(demo=True,desktop=False)

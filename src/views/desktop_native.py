@@ -47,7 +47,7 @@ GITHUB_RELEASES_URL = 'https://github.com/geo-tp/SectorRec/releases'
 GITHUB_REPO_URL = 'https://github.com/geo-tp/SectorRec'
 
 FORMAT_NAMES = {
-    'all': 'All supported formats',
+    'all': 'All formats',
     'photos': 'Photos — common image signatures',
     'video': 'Video — common video signatures',
     'documents': 'Documents — PDF and ZIP/Office families',
@@ -2216,7 +2216,7 @@ class DesktopWindow:
     def show_format_hint(self):
         if not hasattr(self,'format_info') or not self.format_info.winfo_exists():return
         key=self.ui.signature_format
-        text = ('All file-signature families supported by PhotoRec are enabled. This is the safest default.'
+        text = ('Search for photos, videos, documents, audio, archives and other supported file types.'
                 if key=='all' else
                 'Only common signature families are included. Some related formats share a signature; '+
                 'restricting formats may produce incomplete or oversized files.')

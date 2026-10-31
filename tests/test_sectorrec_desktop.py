@@ -46,9 +46,9 @@ class DesktopWorkflowTests(unittest.TestCase):
             with self.assertRaises(ValueError):ui.desktop_select_method('signature')
         finally:ui.close()
 
-    def test_default_photorec_keeps_all_families(self):
+    def test_default_photorec_preserves_upstream_default_families(self):
         cmd = photorec_command('photorec','/tmp/volume.img','/tmp/out')
-        self.assertEqual(cmd[-1],'partition_none,fileopt,everything,enable,wholespace,search')
+        self.assertEqual(cmd[-1], 'partition_none,fileopt,dovecot,disable,wholespace,search')
 
     def test_photo_family_uses_photorec_ids(self):
         cmd = photorec_command('photorec','/tmp/volume.img','/tmp/out','photos')
